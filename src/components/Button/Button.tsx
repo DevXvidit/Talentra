@@ -34,12 +34,10 @@ export const Button = ({
   const getContainerStyle = () => {
     const stylesArray: ViewStyle[] = [styles.base];
     
-    // Size classes
     if (size === 'sm') stylesArray.push(styles.sizeSm);
     else if (size === 'lg') stylesArray.push(styles.sizeLg);
     else stylesArray.push(styles.sizeMd);
 
-    // Variant classes
     if (isDisabled) {
       stylesArray.push(styles.disabled);
     } else if (variant === 'primary') {

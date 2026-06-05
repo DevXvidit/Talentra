@@ -40,4 +40,3 @@ export const completeProfileSchema = z.object({
 });
 
 export type CompleteProfileFormData = z.infer<typeof completeProfileSchema>;
-

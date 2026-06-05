@@ -104,4 +104,3 @@ export const getHasCompletedOnboarding = (): boolean => {
 export const setHasCompletedOnboarding = (val: boolean): void => {
   storage.set('has_completed_onboarding', val ? 'true' : 'false');
 };
-

@@ -48,7 +48,7 @@ export const JobFeedLoading = () => {
 
   return (
     <View style={styles.container}>
-      {/* Header Skeleton */}
+
       <View style={styles.header}>
         <View style={styles.headerTextContainer}>
           <Animated.View style={[styles.greetingSkeleton, { opacity: animatedValue }]} />
@@ -57,10 +57,8 @@ export const JobFeedLoading = () => {
         <Animated.View style={[styles.avatarSkeleton, { opacity: animatedValue }]} />
       </View>
 
-      {/* Search Bar Skeleton */}
       <Animated.View style={[styles.searchSkeleton, { opacity: animatedValue }]} />
 
-      {/* Categories Skeleton */}
       <View style={styles.chipRow}>
         {[1, 2, 3, 4].map((i) => (
           <Animated.View key={i} style={[styles.chipSkeleton, { opacity: animatedValue }]} />
@@ -68,7 +66,7 @@ export const JobFeedLoading = () => {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-        {/* Featured Jobs Skeleton */}
+
         <View style={styles.sectionHeader}>
           <Animated.View style={[styles.sectionTitleSkeleton, { opacity: animatedValue }]} />
         </View>
@@ -92,7 +90,6 @@ export const JobFeedLoading = () => {
           ))}
         </ScrollView>
 
-        {/* Recent Jobs Skeleton */}
         <View style={styles.sectionHeader}>
           <Animated.View style={[styles.sectionTitleSkeleton, { opacity: animatedValue }]} />
         </View>

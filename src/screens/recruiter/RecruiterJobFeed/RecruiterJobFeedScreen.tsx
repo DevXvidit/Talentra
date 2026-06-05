@@ -100,7 +100,7 @@ export const RecruiterJobFeedScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchJobs(1, false, true); // silent refresh
+      fetchJobs(1, false, true); 
     }, [fetchJobs])
   );
 
@@ -221,7 +221,7 @@ export const RecruiterJobFeedScreen = () => {
 
   const renderHeader = () => (
     <View>
-      {/* Profile Completion Progress Card */}
+
       {showCompletionBanner && (
         <TouchableOpacity
           style={styles.completionBanner}
@@ -241,7 +241,6 @@ export const RecruiterJobFeedScreen = () => {
         </TouchableOpacity>
       )}
 
-      {/* Summary Box */}
       <View style={styles.summaryContainer}>
         <Text style={styles.summaryTitle}>Hiring Overview</Text>
         <View style={styles.summaryRow}>
@@ -256,7 +255,6 @@ export const RecruiterJobFeedScreen = () => {
         </View>
       </View>
 
-      {/* Title */}
       <View style={styles.resultsHeader}>
         <Text style={styles.resultsCount}>Your Job Postings</Text>
       </View>
@@ -287,7 +285,6 @@ export const RecruiterJobFeedScreen = () => {
     <SafeAreaView style={styles.container} edges={['top']}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
 
-      {/* Header */}
       <View style={styles.header}>
         <View>
           <Text style={styles.greeting}>Hello, {user?.name?.split(' ')[0] || 'there'}</Text>

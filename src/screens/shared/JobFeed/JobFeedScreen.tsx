@@ -66,27 +66,23 @@ export const JobFeedScreen = () => {
   const showCompletionBanner = !user?.isProfileComplete && completionPercentage < 100;
 
   const [jobs, setJobs] = useState<Job[]>([]);
-  const [loading, setLoading] = useState(true);   // true only on very first load
-  const [searching, setSearching] = useState(false); // true when re-fetching due to search/filter
+  const [loading, setLoading] = useState(true);   
+  const [searching, setSearching] = useState(false); 
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Search state (no keywords)
   const [search, setSearch] = useState('');
 
-  // Filter state
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState('All');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Filter Modal
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [tempCategory, setTempCategory] = useState<string | null>(null);
   const [tempType, setTempType] = useState('All');
 
-  // Pulse animation value for searching skeleton list
   const skeletonAnim = useRef(new Animated.Value(0.3)).current;
 
   useEffect(() => {
@@ -119,14 +115,12 @@ export const JobFeedScreen = () => {
     };
   }, [searching, skeletonAnim]);
 
-  // Use a ref to hold the absolute latest filter state for fetchJobs (avoids stale closure)
   const filtersRef = useRef({
     search: '',
     selectedCategory: null as string | null,
     selectedType: 'All',
   });
 
-  // Keep ref in sync with state changes
   useEffect(() => {
     filtersRef.current = { search, selectedCategory, selectedType };
   }, [search, selectedCategory, selectedType]);
@@ -155,9 +149,6 @@ export const JobFeedScreen = () => {
     setSearch('');
   };
 
-  // Core fetch function — always reads from the ref to get latest filters
-  // isFullLoad=true: show full skeleton (first ever load)
-  // isSearching=true: show inline indicator (search/filter update)
   const fetchJobs = useCallback(async (pageNum = 1, isRefresh = false, isFullLoad = false, isSearching = false) => {
     if (isRefresh) setRefreshing(true);
     else if (pageNum === 1 && isFullLoad) {
@@ -171,7 +162,6 @@ export const JobFeedScreen = () => {
 
     const { search: s, selectedCategory: selCat, selectedType: selType } = filtersRef.current;
 
-    // Build combined query string from text input only
     const combined = s.trim();
 
     try {
@@ -205,15 +195,13 @@ export const JobFeedScreen = () => {
     }
   }, [isRecruiter]);
 
-  // Track if this is the very first mount (no jobs loaded yet)
   const isFirstLoad = useRef(true);
 
-  // Initial load on screen focus
   useFocusEffect(
     useCallback(() => {
       if (isFirstLoad.current) {
         isFirstLoad.current = false;
-        fetchJobs(1, false, true, false); // full skeleton on first load
+        fetchJobs(1, false, true, false); 
       } else {
         const { search: s, selectedCategory: cat, selectedType: type } = filtersRef.current;
         const hasActiveFilters = !!(s.trim() || cat || type !== 'All');
@@ -222,25 +210,23 @@ export const JobFeedScreen = () => {
     }, [fetchJobs])
   );
 
-  // Re-fetch when search text changes (debounced 600ms) — inline indicator only
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
     debounceTimer.current = setTimeout(() => {
       filtersRef.current = { ...filtersRef.current, search };
-      fetchJobs(1, false, false, true); // inline searching indicator
+      fetchJobs(1, false, false, true); 
     }, 600);
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  
   }, [search]);
 
-  // Re-fetch immediately when filters change — show skeleton
   useEffect(() => {
     filtersRef.current = { ...filtersRef.current, selectedCategory, selectedType };
     fetchJobs(1, false, false, true);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  
   }, [selectedCategory, selectedType]);
 
   const handleRefresh = () => fetchJobs(1, true);
@@ -279,7 +265,7 @@ export const JobFeedScreen = () => {
       onPress={() => handleJobPress(item.id)}
     >
       <View style={styles.jobCardInner}>
-        {/* Logo */}
+
         <View style={styles.jobLogo}>
           {item.company?.logoUrl ? (
             <Image source={{ uri: item.company.logoUrl }} style={{ width: 48, height: 48, borderRadius: 12 }} />
@@ -290,13 +276,11 @@ export const JobFeedScreen = () => {
           )}
         </View>
 
-        {/* Title & Company */}
         <View style={styles.jobHeaderInfo}>
           <Text style={styles.jobTitle} numberOfLines={1}>{item.title}</Text>
           <Text style={styles.jobCompany} numberOfLines={1}>{item.company?.name || 'Talentra Partner'}</Text>
         </View>
 
-        {/* Bookmark Icon */}
         {!isRecruiter && (
           <TouchableOpacity style={{ padding: 4, marginRight: 8 }} onPress={() => handleToggleBookmark(item.id)}>
             {item.isBookmarked ? (
@@ -307,7 +291,6 @@ export const JobFeedScreen = () => {
           </TouchableOpacity>
         )}
 
-        {/* Action Button */}
         {isRecruiter ? (
           <View style={styles.viewButton}>
             <Text style={styles.viewButtonText}>View</Text>
@@ -420,7 +403,6 @@ export const JobFeedScreen = () => {
     <SafeAreaView style={styles.container} edges={['top']}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
 
-      {/* Top Header */}
       <View style={styles.header}>
         <View>
           <Text style={styles.greeting}>Hello, {user?.name?.split(' ')[0] || 'there'} 👋</Text>
@@ -444,7 +426,7 @@ export const JobFeedScreen = () => {
       </View>
 
       <View>
-        {/* Profile Completion Banner */}
+
         {!isRecruiter && showCompletionBanner && (
           <TouchableOpacity
             style={styles.completionBanner}
@@ -464,7 +446,6 @@ export const JobFeedScreen = () => {
           </TouchableOpacity>
         )}
 
-        {/* Search Bar & Filter Toggle */}
         <View style={styles.searchRow}>
           <View style={styles.searchContainer}>
             <Search size={18} color={colors.mutedForeground} />
@@ -476,7 +457,7 @@ export const JobFeedScreen = () => {
               onChangeText={setSearch}
               returnKeyType="search"
               onSubmitEditing={() => {
-                // Immediately sync ref and fetch on keyboard submit
+                
                 filtersRef.current = { ...filtersRef.current, search };
                 fetchJobs(1);
               }}
@@ -496,7 +477,6 @@ export const JobFeedScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Results Count */}
         <View style={styles.resultsHeader}>
           <Text style={styles.resultsCount}>
             {isRecruiter ? 'My Posted Jobs' : hasActiveSearch ? 'Search Results' : 'Recent Jobs'}
@@ -527,7 +507,6 @@ export const JobFeedScreen = () => {
         }
       />
 
-      {/* Filter Modal */}
       <Modal
         animationType="slide"
         transparent={true}

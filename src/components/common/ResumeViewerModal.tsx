@@ -56,11 +56,10 @@ export const ResumeViewerModal: React.FC<ResumeViewerModalProps> = ({
     );
   }, []);
 
-  // Memoize the URL to prevent infinite loading loop when component states change
   const sourceUrl = React.useMemo(() => {
     if (!url) return '';
     if (Platform.OS === 'android' && isGoogleViewable) {
-      // Append cache-buster to the document URL itself to force Google Docs Viewer to fetch fresh content
+      
       const separator = url.includes('?') ? '&' : '?';
       const urlWithBuster = `${url}${separator}cb=${Date.now()}`;
       return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(urlWithBuster)}`;
@@ -80,7 +79,6 @@ export const ResumeViewerModal: React.FC<ResumeViewerModalProps> = ({
       <SafeAreaView style={styles.safeArea}>
         <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
 
-        {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity style={styles.closeButton} onPress={onClose} activeOpacity={0.7}>
             <X size={20} color={colors.foreground} />
@@ -116,7 +114,7 @@ export const ResumeViewerModal: React.FC<ResumeViewerModalProps> = ({
             </TouchableOpacity>
           </View>
         ) : (
-          /* WebView — renders natively on iOS, and uses Google Docs Viewer on Android */
+          
           <View style={styles.webContainer}>
             <WebView
               ref={webViewRef}
@@ -197,7 +195,7 @@ const getStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.create({
     color: colors.mutedForeground,
     fontFamily: 'Inter',
   },
-  // Android fallback styles
+  
   androidFallback: {
     flex: 1,
     alignItems: 'center',

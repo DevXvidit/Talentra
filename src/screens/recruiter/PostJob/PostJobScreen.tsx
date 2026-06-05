@@ -25,7 +25,6 @@ import PostJobLoading from './components/PostJobLoading';
 const JOB_TYPE_OPTIONS = Object.values(JOB_TYPES);
 const EXPERIENCE_OPTIONS = ['Entry (0-2 years)', 'Mid (2-5 years)', 'Senior (5-8 years)', 'Lead (8+ years)'];
 
-// Indian salary range presets (in LPA)
 const INR_SALARY_PRESETS = [
   '0–3 LPA',
   '3–6 LPA',
@@ -46,7 +45,6 @@ export const PostJobScreen = () => {
   const navigation = useNavigation<any>();
   const jobId = route.params?.jobId;
 
-  // Navigation steps: 1 = Details, 2 = Responsibilities, 3 = Requirements, 4 = Review
   const [step, setStep] = useState(1);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -94,7 +92,7 @@ export const PostJobScreen = () => {
       };
       fetchJobDetails();
     } else {
-      // Clear form for creating new job
+      
       setStep(1);
       setTitle('');
       setDescription('');
@@ -114,7 +112,6 @@ export const PostJobScreen = () => {
     }
   }, [jobId]);
 
-  // ── Skills helpers ────────────────────────────────────────────────────────
   const handleAddSkill = () => {
     const trimmed = skillInput.trim();
     if (!trimmed) return;
@@ -134,7 +131,6 @@ export const PostJobScreen = () => {
     setMustHaveSkills(mustHaveSkills.filter((s) => s !== skillToRemove));
   };
 
-  // ── Responsibility helpers ────────────────────────────────────────────────
   const handleAddResponsibility = () => {
     const trimmed = responsibilityInput.trim();
     if (!trimmed) return;
@@ -150,7 +146,6 @@ export const PostJobScreen = () => {
     setResponsibilities(responsibilities.filter((_, i) => i !== index));
   };
 
-  // ── Validation ────────────────────────────────────────────────────────────
   const validateStep1 = () => {
     const newErrors: Record<string, string> = {};
     if (!title.trim()) {
@@ -183,7 +178,6 @@ export const PostJobScreen = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // ── Navigation ────────────────────────────────────────────────────────────
   const handleContinue = () => {
     if (step === 1) {
       if (validateStep1()) {
@@ -193,7 +187,7 @@ export const PostJobScreen = () => {
         setHasSubmittedFailed(true);
       }
     } else if (step === 2) {
-      // Responsibilities is optional — always advance
+      
       setStep(3);
       setHasSubmittedFailed(false);
     } else if (step === 3) {
@@ -214,7 +208,6 @@ export const PostJobScreen = () => {
     }
   };
 
-  // ── Submit ────────────────────────────────────────────────────────────────
   const handlePost = async () => {
     setLoading(true);
     const parsedPositions = parseInt(String(totalPositions), 10) || 1;
@@ -234,14 +227,13 @@ export const PostJobScreen = () => {
       if (jobId) {
         await apiClient.patch(`/jobs/${jobId}`, payload);
         useToastStore.getState().show('Job listing updated successfully!', 'success');
-        // Clear params and go back
+        
         navigation.setParams({ jobId: undefined });
         navigation.goBack();
       } else {
         await apiClient.post('/jobs', payload);
         useToastStore.getState().show('Your job listing has been posted successfully!', 'success');
         
-        // Reset form
         setStep(1);
         setTitle('');
         setDescription('');
@@ -265,7 +257,6 @@ export const PostJobScreen = () => {
     }
   };
 
-
   if (loading) {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
@@ -279,7 +270,6 @@ export const PostJobScreen = () => {
     <SafeAreaView style={styles.container} edges={['top']}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
 
-      {/* Screen Header */}
       <View style={styles.header}>
         {step > 1 ? (
           <TouchableOpacity style={styles.backButton} onPress={handleBack} activeOpacity={0.7}>
@@ -292,7 +282,6 @@ export const PostJobScreen = () => {
         <View style={styles.backButtonPlaceholder} />
       </View>
 
-      {/* Steps Progress — clean segmented bar */}
       <View style={[styles.stepsContainer, { paddingVertical: 16 }]}>
         <View style={styles.segmentedBar}>
           {[1, 2, 3, 4].map((s) => (
@@ -318,7 +307,7 @@ export const PostJobScreen = () => {
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
         >
-          {/* Validation Error Banner */}
+
           {hasSubmittedFailed && (
             <View style={styles.errorBanner}>
               <AlertCircle size={20} color={colors.error} />
@@ -329,10 +318,9 @@ export const PostJobScreen = () => {
             </View>
           )}
 
-          {/* ── Step 1: Job Details ── */}
           {step === 1 && (
             <View style={styles.formContainer}>
-              {/* Job Title */}
+
               <View style={styles.inputGroup}>
                 <View style={styles.labelRow}>
                   <Briefcase size={16} color={errors.title ? colors.error : colors.primary} />
@@ -351,7 +339,6 @@ export const PostJobScreen = () => {
                 {errors.title ? <Text style={styles.helperErrorText}>{errors.title}</Text> : null}
               </View>
 
-              {/* Description */}
               <View style={styles.inputGroup}>
                 <View style={styles.labelRow}>
                   <FileText size={16} color={errors.description ? colors.error : colors.primary} />
@@ -373,7 +360,6 @@ export const PostJobScreen = () => {
                 {errors.description ? <Text style={styles.helperErrorText}>{errors.description}</Text> : null}
               </View>
 
-              {/* Category */}
               <View style={styles.inputGroup}>
                 <View style={styles.labelRow}>
                   <Tag size={16} color={colors.primary} />
@@ -385,7 +371,6 @@ export const PostJobScreen = () => {
                 />
               </View>
 
-              {/* Location */}
               <View style={styles.inputGroup}>
                 <View style={styles.labelRow}>
                   <MapPin size={16} color={errors.location ? colors.error : colors.primary} />
@@ -404,7 +389,6 @@ export const PostJobScreen = () => {
                 {errors.location ? <Text style={styles.helperErrorText}>{errors.location}</Text> : null}
               </View>
 
-              {/* Number of Open Positions */}
               <View style={styles.inputGroup}>
                 <View style={styles.labelRow}>
                   <Briefcase size={16} color={errors.totalPositions ? colors.error : colors.primary} />
@@ -432,7 +416,6 @@ export const PostJobScreen = () => {
             </View>
           )}
 
-          {/* ── Step 2: Key Responsibilities ── */}
           {step === 2 && (
             <View style={styles.formContainer}>
               <View style={styles.inputGroup}>
@@ -444,7 +427,6 @@ export const PostJobScreen = () => {
                   Add specific duties candidates will perform. Each item becomes a bullet point on the job listing.
                 </Text>
 
-                {/* Input row */}
                 <View style={[styles.skillInputContainer, { marginTop: 12 }]}>
                   <TextInput
                     style={styles.skillTextInput}
@@ -460,7 +442,6 @@ export const PostJobScreen = () => {
                   </TouchableOpacity>
                 </View>
 
-                {/* Bullet list */}
                 {responsibilities.length > 0 && (
                   <View style={styles.responsibilityList}>
                     {responsibilities.map((item, index) => (
@@ -493,10 +474,9 @@ export const PostJobScreen = () => {
             </View>
           )}
 
-          {/* ── Step 3: Requirements ── */}
           {step === 3 && (
             <View style={styles.formContainer}>
-              {/* Job Type */}
+
               <View style={styles.inputGroup}>
                 <View style={styles.labelRow}>
                   <Briefcase size={16} color={colors.primary} />
@@ -518,7 +498,6 @@ export const PostJobScreen = () => {
                 </View>
               </View>
 
-              {/* Experience Level */}
               <View style={styles.inputGroup}>
                 <View style={styles.labelRow}>
                   <Tag size={16} color={colors.primary} />
@@ -540,14 +519,13 @@ export const PostJobScreen = () => {
                 </View>
               </View>
 
-              {/* Salary Range — INR Presets */}
               <View style={{ marginBottom: 24 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
                   <IndianRupee size={16} color={errors.salary ? colors.error : colors.primary} />
                   <Text style={[styles.label, errors.salary && styles.labelError, { marginLeft: 6 }]}>Salary Range (INR) *</Text>
                 </View>
                 <Text style={styles.skillHelpText}>Select a preset range or type a custom value.</Text>
-                {/* Preset chips */}
+
                 <View style={[styles.chipRow, { marginTop: 10 }]}>
                   {INR_SALARY_PRESETS.map((preset) => (
                     <TouchableOpacity
@@ -565,7 +543,7 @@ export const PostJobScreen = () => {
                     </TouchableOpacity>
                   ))}
                 </View>
-                {/* Custom input */}
+
                 <TextInput
                   style={[styles.input, { marginTop: 12 }, errors.salary && styles.inputError]}
                   placeholder="Or type custom, e.g. ₹12–18 LPA"
@@ -579,7 +557,6 @@ export const PostJobScreen = () => {
                 {errors.salary ? <Text style={styles.helperErrorText}>{errors.salary}</Text> : null}
               </View>
 
-              {/* Must-Have Skills */}
               <View style={styles.inputGroup}>
                 <View style={styles.labelRow}>
                   <Tag size={16} color={colors.primary} />
@@ -616,7 +593,6 @@ export const PostJobScreen = () => {
             </View>
           )}
 
-          {/* ── Step 4: Review ── */}
           {step === 4 && (
             <View style={styles.reviewContainer}>
               <Text style={styles.reviewHeading}>Review Listing Details</Text>
@@ -660,7 +636,6 @@ export const PostJobScreen = () => {
                   <Text style={styles.reviewVal}>{totalPositions}</Text>
                 </View>
 
-                {/* Responsibilities */}
                 <View style={[styles.reviewRow, { flexDirection: 'column', alignItems: 'flex-start' }]}>
                   <Text style={[styles.reviewLabel, { marginBottom: 6 }]}>Responsibilities</Text>
                   {responsibilities.length > 0 ? (
@@ -675,7 +650,6 @@ export const PostJobScreen = () => {
                   )}
                 </View>
 
-                {/* Must-Have Skills */}
                 <View style={[styles.reviewRow, { flexDirection: 'column', alignItems: 'flex-start' }]}>
                   <Text style={[styles.reviewLabel, { marginBottom: 6 }]}>Must-Have Skills</Text>
                   {mustHaveSkills.length > 0 ? (
@@ -700,7 +674,6 @@ export const PostJobScreen = () => {
           )}
         </ScrollView>
 
-        {/* Footer Navigation Button */}
         <View style={styles.footer}>
           {step < 4 ? (
             <TouchableOpacity style={styles.primaryButton} onPress={handleContinue} activeOpacity={0.8}>

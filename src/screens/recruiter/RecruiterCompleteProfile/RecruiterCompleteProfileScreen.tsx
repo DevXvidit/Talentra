@@ -141,7 +141,7 @@ export const RecruiterCompleteProfileScreen = () => {
     setIsSubmitting(true);
 
     try {
-      // 1. Recruiter Profile Update
+      
       const profileFormData = new FormData();
       profileFormData.append('name', data.name.trim());
       profileFormData.append('phone', `+91${data.phone.trim()}`);
@@ -161,7 +161,6 @@ export const RecruiterCompleteProfileScreen = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      // 2. Company Setup (Create or Update)
       const companyFormData = new FormData();
       companyFormData.append('name', data.companyName.trim());
       companyFormData.append('website', data.companyWebsite.trim());
@@ -179,19 +178,18 @@ export const RecruiterCompleteProfileScreen = () => {
       }
 
       if (!user?.companyId) {
-        // Create company profile
+        
         await apiClient.post('/recruiter/companies', companyFormData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       } else {
-        // Update company profile
+        
         const companyId = typeof user.companyId === 'string' ? user.companyId : user.companyId._id;
         await apiClient.patch(`/recruiter/companies/${companyId}`, companyFormData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
 
-      // 3. Retrieve fully updated user from /me
       const meResponse = await authService.getMe();
       if (meResponse.success && meResponse.user) {
         updateUser(meResponse.user);
@@ -238,10 +236,9 @@ export const RecruiterCompleteProfileScreen = () => {
           )}
 
           <View style={styles.formContainer}>
-            {/* --- SECTION 1: Recruiter Profile --- */}
+
             <Text style={styles.sectionHeader}>1. Recruiter Details</Text>
 
-            {/* Avatar Image Picker */}
             <View style={styles.imagePickerSection}>
               <TouchableOpacity style={styles.avatarWrapper} activeOpacity={0.8} onPress={handlePickAvatar}>
                 <View style={styles.avatarContainer}>
@@ -262,7 +259,6 @@ export const RecruiterCompleteProfileScreen = () => {
               <Text style={styles.imagePickerHelp}>Tap to change profile picture</Text>
             </View>
 
-            {/* Recruiter Name */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.name ? styles.labelError : null]}>Full Name</Text>
               <Controller
@@ -282,7 +278,6 @@ export const RecruiterCompleteProfileScreen = () => {
               {errors.name && <Text style={styles.helperErrorText}>{errors.name.message}</Text>}
             </View>
 
-            {/* Recruiter Title */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.recruiterTitle ? styles.labelError : null]}>Hiring Title</Text>
               <Controller
@@ -302,7 +297,6 @@ export const RecruiterCompleteProfileScreen = () => {
               {errors.recruiterTitle && <Text style={styles.helperErrorText}>{errors.recruiterTitle.message}</Text>}
             </View>
 
-            {/* Recruiter Phone */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.phone ? styles.labelError : null]}>Contact Phone</Text>
               <View style={[styles.phoneInputContainer, errors.phone ? styles.inputError : null]}>
@@ -329,7 +323,6 @@ export const RecruiterCompleteProfileScreen = () => {
               {errors.phone && <Text style={styles.helperErrorText}>{errors.phone.message}</Text>}
             </View>
 
-            {/* Recruiter Location */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.location ? styles.labelError : null]}>Your Location</Text>
               <Controller
@@ -349,7 +342,6 @@ export const RecruiterCompleteProfileScreen = () => {
               {errors.location && <Text style={styles.helperErrorText}>{errors.location.message}</Text>}
             </View>
 
-            {/* Recruiter About / Bio */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.about ? styles.labelError : null]}>Bio Description</Text>
               <Controller
@@ -371,10 +363,8 @@ export const RecruiterCompleteProfileScreen = () => {
               {errors.about && <Text style={styles.helperErrorText}>{errors.about.message}</Text>}
             </View>
 
-            {/* --- SECTION 2: Company Details --- */}
             <Text style={[styles.sectionHeader, { marginTop: 24 }]}>2. Company Details</Text>
 
-            {/* Company Logo Picker */}
             <View style={styles.logoPickerContainer}>
               <Text style={styles.label}>Company Logo</Text>
               {companyLogo?.uri || company?.logoUrl ? (
@@ -396,7 +386,6 @@ export const RecruiterCompleteProfileScreen = () => {
               )}
             </View>
 
-            {/* Company Name */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.companyName ? styles.labelError : null]}>Company Name</Text>
               <Controller
@@ -416,7 +405,6 @@ export const RecruiterCompleteProfileScreen = () => {
               {errors.companyName && <Text style={styles.helperErrorText}>{errors.companyName.message}</Text>}
             </View>
 
-            {/* Company Website */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.companyWebsite ? styles.labelError : null]}>Website URL</Text>
               <Controller
@@ -438,7 +426,6 @@ export const RecruiterCompleteProfileScreen = () => {
               {errors.companyWebsite && <Text style={styles.helperErrorText}>{errors.companyWebsite.message}</Text>}
             </View>
 
-            {/* Company Industry */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.companyIndustry ? styles.labelError : null]}>Industry</Text>
               <Controller
@@ -458,7 +445,6 @@ export const RecruiterCompleteProfileScreen = () => {
               {errors.companyIndustry && <Text style={styles.helperErrorText}>{errors.companyIndustry.message}</Text>}
             </View>
 
-            {/* Company Headquarters */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.companyHeadquarters ? styles.labelError : null]}>Company Headquarters</Text>
               <Controller
@@ -478,7 +464,6 @@ export const RecruiterCompleteProfileScreen = () => {
               {errors.companyHeadquarters && <Text style={styles.helperErrorText}>{errors.companyHeadquarters.message}</Text>}
             </View>
 
-            {/* Company Size Dropdown/Enum Selection */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.companySize ? styles.labelError : null]}>Company Size</Text>
               <Controller

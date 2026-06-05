@@ -262,7 +262,7 @@ export const getStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.cr
     justifyContent: 'center',
     backgroundColor: colors.background,
   },
-  // Recruiter specific
+  
   recruiterCard: {
     flexDirection: 'row',
     alignItems: 'center',

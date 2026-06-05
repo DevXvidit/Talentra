@@ -68,7 +68,6 @@ export const JobDetailScreen = () => {
   const [completeProfileVisible, setCompleteProfileVisible] = useState(false);
   const [applyResumeVisible, setApplyResumeVisible] = useState(false);
 
-  // States for cover letter and resume selections
   const [coverLetter, setCoverLetter] = useState('');
   const [selectedResumeType, setSelectedResumeType] = useState<'saved' | 'new' | null>(null);
   const [pickedResumeFile, setPickedResumeFile] = useState<any>(null);
@@ -141,11 +140,9 @@ export const JobDetailScreen = () => {
     }
   }, [jobId, fetchJob, fetchApplicants]);
 
-  // Toggle Bookmark
   const handleBookmark = async () => {
     if (!jobData) return;
 
-    // Optimistic update
     const previousBookmarked = jobData.isBookmarked;
     setJobData((prev: any) => ({ ...prev, isBookmarked: !prev.isBookmarked }));
 
@@ -157,7 +154,7 @@ export const JobDetailScreen = () => {
         'success'
       );
     } catch (err: any) {
-      // Rollback
+      
       setJobData((prev: any) => ({ ...prev, isBookmarked: previousBookmarked }));
       useToastStore.getState().show('Failed to update bookmark status.', 'error');
     }
@@ -236,7 +233,6 @@ export const JobDetailScreen = () => {
     }
   };
 
-  // Handle Resume Upload and Apply
   const handleApply = () => {
     if (jobData?.status === 'closed' || (jobData?.filledPositions >= jobData?.totalPositions)) {
       useToastStore.getState().show('This position is closed and not accepting applications.', 'error');
@@ -248,7 +244,6 @@ export const JobDetailScreen = () => {
       return;
     }
 
-    // Initialize/reset apply states and open the bottom sheet modal
     setCoverLetter('');
     setPickedResumeFile(null);
     setSelectedResumeType(user?.resumeUrl ? 'saved' : null);
@@ -280,7 +275,6 @@ export const JobDetailScreen = () => {
     <SafeAreaView style={styles.container} edges={['top']}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
 
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={handleBack} activeOpacity={0.7}>
           <ChevronLeft color={colors.foreground} size={24} />
@@ -312,7 +306,7 @@ export const JobDetailScreen = () => {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        {/* Hero Card */}
+
         <View style={styles.heroCard}>
           <View style={styles.heroTop}>
             <View style={[styles.logoCircle, { borderRadius: 16, overflow: 'hidden' }]}>
@@ -364,7 +358,6 @@ export const JobDetailScreen = () => {
           </View>
         </View>
 
-        {/* Applicants Banner */}
         <View style={styles.applicantsBanner}>
           <View style={styles.avatarGroup}>
             {jobData.firstApplicants && jobData.firstApplicants.length > 0 ? (
@@ -390,13 +383,11 @@ export const JobDetailScreen = () => {
           </View>
         </View>
 
-        {/* Job Description */}
         <View style={styles.listContainer}>
           <Text style={styles.sectionTitle}>Job Description</Text>
           <Text style={styles.descriptionText}>{jobData.description}</Text>
         </View>
-        
-        {/* Must-Have */}
+
         {jobData.mustHaveSkills && jobData.mustHaveSkills.length > 0 && (
           <View style={styles.listContainer}>
             <Text style={styles.sectionTitle}>Must-Have</Text>
@@ -409,7 +400,6 @@ export const JobDetailScreen = () => {
           </View>
         )}
 
-        {/* Good to Have / Responsibilities */}
         {jobData.responsibilities && jobData.responsibilities.length > 0 && (
           <View style={styles.listContainer}>
             <Text style={styles.sectionTitle}>Good to Have</Text>
@@ -419,7 +409,6 @@ export const JobDetailScreen = () => {
           </View>
         )}
 
-        {/* Company Details Card */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>About the Company</Text>
           <View style={styles.recruiterCard}>
@@ -437,7 +426,6 @@ export const JobDetailScreen = () => {
           </View>
         </View>
 
-        {/* Applicants List Link for Recruiters */}
         {!isCandidate && (
           <View style={[styles.section, { paddingBottom: 40 }]}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
@@ -472,7 +460,6 @@ export const JobDetailScreen = () => {
         )}
       </ScrollView>
 
-      {/* Action Footer for Candidates */}
       {isCandidate && (
         <View style={styles.bottomBar}>
           {hasAppliedLocal ? (
@@ -533,7 +520,6 @@ export const JobDetailScreen = () => {
         </View>
       )}
 
-      {/* Custom Complete Profile Modal */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -571,7 +557,6 @@ export const JobDetailScreen = () => {
         </View>
       </Modal>
 
-      {/* Custom Apply Resume Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -595,8 +580,6 @@ export const JobDetailScreen = () => {
               <Text style={styles.bottomSheetDesc}>
                 You're applying for <Text style={{ fontWeight: '700', color: colors.foreground }}>{jobData?.title}</Text> at <Text style={{ fontWeight: '700', color: colors.foreground }}>{jobData?.company?.name}</Text>.
               </Text>
-
-              {/* Cover Letter Input */}
               <View style={{ marginBottom: 18 }}>
                 <Text style={{ fontSize: 14, fontWeight: '700', color: colors.foreground, marginBottom: 8, fontFamily: 'Space Grotesk' }}>Cover Letter</Text>
                 <TextInput
@@ -618,8 +601,6 @@ export const JobDetailScreen = () => {
                   </Text>
                 </View>
               </View>
-
-              {/* Resume Selection */}
               <Text style={{ fontSize: 14, fontWeight: '700', color: colors.foreground, marginBottom: 8, fontFamily: 'Space Grotesk' }}>Resume Document</Text>
               
               {user?.resumeUrl ? (
@@ -678,8 +659,6 @@ export const JobDetailScreen = () => {
                   </TouchableOpacity>
                 </View>
               )}
-
-              {/* Action Buttons */}
               <TouchableOpacity
                 style={[
                   styles.modalButton,

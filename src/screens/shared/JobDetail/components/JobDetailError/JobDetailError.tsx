@@ -24,7 +24,6 @@ export const JobDetailError: React.FC<JobDetailErrorProps> = ({
     <View style={styles.container}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
 
-      {/* Navigation Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={onBack} activeOpacity={0.7}>
           <ChevronLeft color={colors.foreground} size={24} />
@@ -33,7 +32,6 @@ export const JobDetailError: React.FC<JobDetailErrorProps> = ({
         <View style={styles.placeholder} />
       </View>
 
-      {/* Error Info Center */}
       <View style={styles.content}>
         <View style={styles.iconCircle}>
           <AlertCircle color={colors.error} size={36} />
@@ -42,7 +40,6 @@ export const JobDetailError: React.FC<JobDetailErrorProps> = ({
         <Text style={styles.title}>Job not available</Text>
         <Text style={styles.subtitle}>{message}</Text>
 
-        {/* Action Buttons */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.retryButton} onPress={onRetry} activeOpacity={0.85}>
             <RefreshCw color={colors.primaryForeground} size={16} style={styles.icon} />
@@ -57,7 +54,6 @@ export const JobDetailError: React.FC<JobDetailErrorProps> = ({
           )}
         </View>
 
-        {/* Footer Details */}
         <View style={styles.errorFooter}>
           <Text style={styles.errorCode}>Error code: JOB_NOT_FOUND</Text>
           <Text style={styles.supportId}>Reference ID: 388172</Text>

@@ -27,14 +27,13 @@ export const PostJobLoading = () => {
 
   return (
     <View style={styles.container}>
-      {/* Header Skeleton */}
+
       <View style={styles.header}>
         <Animated.View style={[styles.backSkeleton, { opacity: animatedValue }]} />
         <Animated.View style={[styles.titleSkeleton, { opacity: animatedValue }]} />
         <Animated.View style={[styles.draftSkeleton, { opacity: animatedValue }]} />
       </View>
 
-      {/* Steps Indicator Skeleton */}
       <View style={styles.stepsRow}>
         {[1, 2, 3].map((i) => (
           <View key={i} style={styles.stepSkeletonContainer}>
@@ -45,7 +44,7 @@ export const PostJobLoading = () => {
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Form Group Skeletons */}
+
         {[1, 2, 3, 4].map((i) => (
           <View key={i} style={styles.inputGroup}>
             <Animated.View style={[styles.labelSkeleton, { opacity: animatedValue }]} />
@@ -54,7 +53,6 @@ export const PostJobLoading = () => {
         ))}
       </ScrollView>
 
-      {/* Bottom Button Skeleton */}
       <View style={styles.footer}>
         <Animated.View style={[styles.buttonSkeleton, { opacity: animatedValue }]} />
       </View>

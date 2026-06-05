@@ -16,7 +16,6 @@ export const apiClient = axios.create({
   timeout: 10000,
 });
 
-// ── Request interceptor — attach access token ────────────────────────────────
 apiClient.interceptors.request.use(
   (config) => {
     const token = getToken();
@@ -28,7 +27,6 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ── Response interceptor — auto-refresh on 401 ──────────────────────────────
 let isRefreshing = false;
 let pendingQueue: Array<{
   resolve: (token: string) => void;
@@ -51,7 +49,6 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Only try refresh on 401, and only once per request
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
@@ -60,17 +57,16 @@ apiClient.interceptors.response.use(
     ) {
       const refreshToken = getRefreshToken();
 
-      // No refresh token stored — logout immediately
       if (!refreshToken) {
         clearAuthStorage();
-        // Dynamic import to avoid circular dependency
+        
         const { useAuthStore } = require('../store/useAuthStore');
         useAuthStore.getState().logout();
         return Promise.reject(error);
       }
 
       if (isRefreshing) {
-        // Queue this request until refresh completes
+        
         return new Promise((resolve, reject) => {
           pendingQueue.push({
             resolve: (token) => {
@@ -95,20 +91,16 @@ apiClient.interceptors.response.use(
         const newAccessToken: string = res.data.accessToken;
         const newRefreshToken: string = res.data.refreshToken;
 
-        // Persist the new tokens
         setToken(newAccessToken);
         if (newRefreshToken) setRefreshToken(newRefreshToken);
 
-        // Flush queued requests
         processQueue(null, newAccessToken);
 
-        // Retry the original request with new token
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return apiClient(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
 
-        // Refresh failed — clear everything and force logout
         clearAuthStorage();
         const { useAuthStore } = require('../store/useAuthStore');
         useAuthStore.getState().logout();

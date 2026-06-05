@@ -41,13 +41,12 @@ export const useAuthStore = create<AuthState>((set) => ({
       setToken(response.token);
       if (response.refreshToken) setRefreshToken(response.refreshToken);
 
-      // Fetch full user profile (includes profileCompletionPercentage, isProfileComplete, etc.)
       let fullUser = response.user;
       try {
         const meResponse = await authService.getMe();
         fullUser = meResponse.user;
       } catch {
-        // fallback to login response user
+        
       }
 
       setStoredUser(fullUser);
@@ -81,7 +80,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         const meResponse = await authService.getMe();
         fullUser = meResponse.user;
       } catch {
-        // fallback to register response user
+        
       }
 
       setStoredUser(fullUser);
@@ -115,7 +114,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         const meResponse = await authService.getMe();
         fullUser = meResponse.user;
       } catch {
-        // fallback to google login response user
+        
       }
 
       setStoredUser(fullUser);

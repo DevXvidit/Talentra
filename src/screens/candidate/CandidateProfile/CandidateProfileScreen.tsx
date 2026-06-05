@@ -56,7 +56,6 @@ export const CandidateProfileScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Settings Modals and Toggles
   const [privacyVisible, setPrivacyVisible] = useState(false);
   const [supportVisible, setSupportVisible] = useState(false);
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
@@ -125,7 +124,7 @@ export const CandidateProfileScreen = () => {
       }
     } catch (err: any) {
       if (isErrorWithCode(err) && err.code === errorCodes.OPERATION_CANCELED) {
-        // Cancelled
+        
       } else {
         const msg = err.response?.data?.message || err.message || 'Failed to update profile picture.';
         useToastStore.getState().show(msg, 'error');
@@ -171,7 +170,7 @@ export const CandidateProfileScreen = () => {
       }
     } catch (err: any) {
       if (isErrorWithCode(err) && err.code === errorCodes.OPERATION_CANCELED) {
-        // User cancelled picker
+        
       } else {
         const msg = err.response?.data?.message || err.message || 'Failed to update resume.';
         useToastStore.getState().show(msg, 'error');
@@ -185,7 +184,6 @@ export const CandidateProfileScreen = () => {
     if (!user?.resumeUrl) return null;
     let url = user.resumeUrl;
 
-    // Replace localhost or 127.0.0.1 with the actual backend host for mobile device compatibility
     if (url.includes('localhost:5001') || url.includes('127.0.0.1:5001')) {
       const host = API_BASE_URL.split('/api/v1')[0];
       url = url.replace(/https?:\/\/(localhost|127\.0\.0\.1):5001/, host);
@@ -224,13 +222,12 @@ export const CandidateProfileScreen = () => {
     <SafeAreaView style={styles.container} edges={['top']}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
 
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitleText}>Profile</Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-        {/* Main Profile Info Card */}
+
         <View style={styles.mainInfoCard}>
           <TouchableOpacity
             style={styles.avatarWrapper}
@@ -273,7 +270,6 @@ export const CandidateProfileScreen = () => {
             <Text style={styles.statusText}>Available for work</Text>
           </View>
 
-          {/* Stats Box (White card inside main info card) */}
           <View style={styles.statsCardContainer}>
             <View style={styles.statCol}>
               <Text style={styles.statValText}>{stats?.applied ?? 0}</Text>
@@ -292,7 +288,6 @@ export const CandidateProfileScreen = () => {
           </View>
         </View>
 
-        {/* Personal Info Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Personal Info</Text>
 
@@ -372,7 +367,6 @@ export const CandidateProfileScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Resume Section */}
         {user?.resumeUrl && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Resume</Text>
@@ -399,7 +393,6 @@ export const CandidateProfileScreen = () => {
           </View>
         )}
 
-        {/* Settings Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Settings</Text>
 
@@ -433,14 +426,12 @@ export const CandidateProfileScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Logout Button */}
         <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout} activeOpacity={0.7}>
           <LogOut size={18} color={colors.error} />
           <Text style={styles.logoutBtnText}>Log Out</Text>
         </TouchableOpacity>
       </ScrollView>
 
-      {/* Privacy & Security Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -463,7 +454,6 @@ export const CandidateProfileScreen = () => {
                     Talentra takes your privacy very seriously. We use industry-standard encryption protocols to protect your personal details, credentials, and uploaded documents like your resume.
                   </Text>
 
-                  {/* Toggle Switch */}
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: colors.muted, padding: 16, borderRadius: 12, marginTop: 12 }}>
                     <View style={{ flex: 1, paddingRight: 12 }}>
                       <Text style={{ fontSize: 14, fontWeight: '600', color: colors.foreground, marginBottom: 4, fontFamily: 'Inter' }}>Two-Factor Authentication</Text>
@@ -492,7 +482,6 @@ export const CandidateProfileScreen = () => {
         </TouchableWithoutFeedback>
       </Modal>
 
-      {/* Help & Support Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -530,7 +519,6 @@ export const CandidateProfileScreen = () => {
         </TouchableWithoutFeedback>
       </Modal>
 
-      {/* Help Support Modal (Consolidated FAQ layout) */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -570,7 +558,7 @@ export const CandidateProfileScreen = () => {
           </View>
         </TouchableWithoutFeedback>
       </Modal>
-      {/* Resume Options Modal (Custom Bottom Sheet replacement for native Alert) */}
+
       <Modal
         animationType="slide"
         transparent={true}

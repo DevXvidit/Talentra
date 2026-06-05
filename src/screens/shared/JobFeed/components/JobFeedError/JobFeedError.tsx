@@ -29,8 +29,6 @@ export const JobFeedError: React.FC<JobFeedErrorProps> = ({
         <Text style={styles.subtitle}>
           Please check your internet connection and try again. Your saved jobs are still available offline.
         </Text>
-
-        {/* Custom Actions */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.retryButton} onPress={onRetry} activeOpacity={0.85}>
             <RefreshCw color={colors.primaryForeground} size={16} style={styles.icon} />
@@ -44,8 +42,6 @@ export const JobFeedError: React.FC<JobFeedErrorProps> = ({
             </TouchableOpacity>
           )}
         </View>
-
-        {/* Footer Details */}
         <View style={styles.errorFooter}>
           <Text style={styles.errorCode}>Error code: NET_ERR_001</Text>
           <Text style={styles.supportId}>Support ID: 998273</Text>

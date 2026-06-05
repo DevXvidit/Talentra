@@ -64,7 +64,7 @@ export const RecruiterProfileScreen = () => {
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-        {/* Profile Card Info */}
+
         <TouchableOpacity
           style={styles.profileCard}
           activeOpacity={0.7}
@@ -86,7 +86,6 @@ export const RecruiterProfileScreen = () => {
           </Text>
         </TouchableOpacity>
 
-        {/* Counters Box */}
         <View style={styles.statsRow}>
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{jobsCount}</Text>
@@ -102,7 +101,6 @@ export const RecruiterProfileScreen = () => {
           </View>
         </View>
 
-        {/* Settings Menu List */}
         <View style={styles.menuSection}>
           <TouchableOpacity 
             style={styles.menuItem} 
@@ -162,7 +160,6 @@ export const RecruiterProfileScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Logout Button */}
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout} activeOpacity={0.7}>
           <LogOut size={18} color={colors.error} style={styles.logoutIcon} />
           <Text style={styles.logoutText}>Log Out</Text>
@@ -191,7 +188,6 @@ export const RecruiterProfileScreen = () => {
                     Talentra takes your privacy very seriously. We use industry-standard encryption protocols to protect your personal details, credentials, and uploaded documents.
                   </Text>
 
-                  {/* Toggle Switch */}
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: colors.muted, padding: 16, borderRadius: 12, marginTop: 12 }}>
                     <View style={{ flex: 1, paddingRight: 12 }}>
                       <Text style={{ fontSize: 14, fontWeight: '600', color: colors.foreground, marginBottom: 4, fontFamily: 'Inter' }}>Two-Factor Authentication</Text>
@@ -216,7 +212,6 @@ export const RecruiterProfileScreen = () => {
         </TouchableWithoutFeedback>
       </Modal>
 
-      {/* Help & Support Modal */}
       <Modal
         animationType="slide"
         transparent={true}

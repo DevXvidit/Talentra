@@ -37,7 +37,7 @@ export const getStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.cr
     marginHorizontal: 24,
     marginTop: 16,
     marginBottom: 24,
-    backgroundColor: isDark ? colors.card : '#F0F4FA', // Soft light-blue background tint in light mode
+    backgroundColor: isDark ? colors.card : '#F0F4FA', 
     borderRadius: 24,
     padding: 24,
     alignItems: 'center',
@@ -49,7 +49,7 @@ export const getStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.cr
   avatarContainer: {
     width: 96,
     height: 96,
-    borderRadius: 24, // Rounded square
+    borderRadius: 24, 
     overflow: 'hidden',
     backgroundColor: colors.primary,
   },
@@ -72,7 +72,7 @@ export const getStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.cr
     borderRadius: 14,
     backgroundColor: colors.primary,
     borderWidth: 2,
-    borderColor: isDark ? colors.card : '#F0F4FA', // Matches card background
+    borderColor: isDark ? colors.card : '#F0F4FA', 
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -100,7 +100,7 @@ export const getStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.cr
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#10B981', // Emerald green / Teal
+    backgroundColor: '#10B981', 
   },
   statusText: {
     fontSize: 12,
@@ -163,7 +163,7 @@ export const getStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.cr
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: isDark ? colors.surface : '#EEF2FF', // Very soft blue/indigo tint in light mode
+    backgroundColor: isDark ? colors.surface : '#EEF2FF', 
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
@@ -187,7 +187,7 @@ export const getStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.cr
   resumeCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: isDark ? colors.card : '#EEF2FF', // Soft indigo background in light mode
+    backgroundColor: isDark ? colors.card : '#EEF2FF', 
     borderWidth: 1,
     borderColor: isDark ? colors.border : '#C7D2FE',
     borderRadius: 20,
@@ -274,7 +274,7 @@ export const getStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.cr
     height: 52,
     borderRadius: 26,
     borderWidth: 1,
-    borderColor: isDark ? colors.border : '#FDA4AF', // Soft red border in light mode
+    borderColor: isDark ? colors.border : '#FDA4AF', 
     backgroundColor: colors.background,
     gap: 8,
   },

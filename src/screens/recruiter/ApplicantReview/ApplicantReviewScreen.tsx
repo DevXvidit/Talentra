@@ -40,7 +40,6 @@ export const ApplicantReviewScreen = () => {
     let url = applicant?.resumeUrl || applicant?.candidate?.resumeUrl;
     if (!url) return null;
     
-    // Replace localhost or 127.0.0.1 with the actual backend host for mobile device compatibility
     if (url.includes('localhost:5001') || url.includes('127.0.0.1:5001')) {
       const host = API_BASE_URL.split('/api/v1')[0];
       url = url.replace(/https?:\/\/(localhost|127\.0\.0\.1):5001/, host);

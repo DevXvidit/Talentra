@@ -20,21 +20,21 @@ export const LIGHT_COLORS = {
 } as const;
 
 export const DARK_COLORS = {
-  background: '#0f172a', // slate-900
-  foreground: '#f8fafc', // slate-50
-  border: '#334155', // slate-700
-  input: '#1e293b', // slate-800
-  primary: '#3b82f6', // blue-500
+  background: '#0f172a', 
+  foreground: '#f8fafc', 
+  border: '#334155', 
+  input: '#1e293b', 
+  primary: '#3b82f6', 
   primaryForeground: '#ffffff',
-  secondary: '#14B8A6', // keep brand teal
+  secondary: '#14B8A6', 
   secondaryForeground: '#ffffff',
-  muted: '#1e293b', // slate-800
-  mutedForeground: '#94a3b8', // slate-400
+  muted: '#1e293b', 
+  mutedForeground: '#94a3b8', 
   accent: '#14B8A6',
   accentForeground: '#ffffff',
-  error: '#f87171', // red-400
+  error: '#f87171', 
   errorForeground: '#ffffff',
-  card: '#1e293b', // slate-800
+  card: '#1e293b', 
   cardForeground: '#f8fafc',
   surface: '#1e293b',
   transparent: 'transparent',
@@ -61,7 +61,6 @@ export interface ThemeColors {
   transparent: string;
 }
 
-// Export for backward compatibility
 export const COLORS = LIGHT_COLORS;
 
 export const SPACING = {

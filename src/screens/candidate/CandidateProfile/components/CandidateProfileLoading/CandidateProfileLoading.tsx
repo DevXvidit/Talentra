@@ -27,7 +27,7 @@ export const CandidateProfileLoading = () => {
 
   return (
     <View style={styles.container}>
-      {/* Header Skeleton */}
+
       <View style={styles.header}>
         <Animated.View style={[styles.backSkeleton, { opacity: animatedValue }]} />
         <Animated.View style={[styles.titleSkeleton, { opacity: animatedValue }]} />
@@ -35,27 +35,24 @@ export const CandidateProfileLoading = () => {
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Avatar & Info Card Skeleton */}
+
         <View style={styles.profileCard}>
           <Animated.View style={[styles.avatarSkeleton, { opacity: animatedValue }]} />
           <Animated.View style={[styles.nameSkeleton, { opacity: animatedValue }]} />
           <Animated.View style={[styles.subtitleSkeleton, { opacity: animatedValue }]} />
         </View>
 
-        {/* Stats Row Skeleton */}
         <View style={styles.statsRow}>
           {[1, 2, 3].map((i) => (
             <Animated.View key={i} style={[styles.statBoxSkeleton, { opacity: animatedValue }]} />
           ))}
         </View>
 
-        {/* Documents Card Skeleton */}
         <View style={styles.section}>
           <Animated.View style={[styles.sectionHeadingSkeleton, { opacity: animatedValue }]} />
           <Animated.View style={[styles.docCardSkeleton, { opacity: animatedValue }]} />
         </View>
 
-        {/* Menu Row Skeletons */}
         <View style={styles.menuSection}>
           {[1, 2, 3].map((i) => (
             <View key={i} style={styles.menuRow}>

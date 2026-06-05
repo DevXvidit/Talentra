@@ -10,7 +10,6 @@ import { API_BASE_URL as ENV_API_BASE_URL } from '@env';
 
 export const API_BASE_URL = ENV_API_BASE_URL || 'https://talentra-backend-7mg5.onrender.com/api/v1';
 
-
 export const STORAGE_KEYS = {
   JWT_TOKEN: 'jwt_token',
   REFRESH_TOKEN: 'refresh_token',

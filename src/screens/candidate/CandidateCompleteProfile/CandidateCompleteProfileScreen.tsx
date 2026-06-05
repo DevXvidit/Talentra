@@ -67,7 +67,6 @@ export const CandidateCompleteProfileScreen = () => {
 
   const resume = watch('resume');
 
-  // Pick PDF/DOCX Resume Document
   const handlePickResume = async () => {
     try {
       const [result] = await pick({
@@ -84,7 +83,7 @@ export const CandidateCompleteProfileScreen = () => {
       }, { shouldValidate: true });
     } catch (err) {
       if (isErrorWithCode(err) && err.code === errorCodes.OPERATION_CANCELED) {
-        // User cancelled picker
+        
       } else {
         useToastStore.getState().show('Failed to pick resume. Please try again.', 'error');
       }
@@ -95,7 +94,6 @@ export const CandidateCompleteProfileScreen = () => {
     setValue('resume', null, { shouldValidate: true });
   };
 
-  // Handle Form Submission
   const onSubmit = async (data: CompleteProfileFormData) => {
     setGeneralError(null);
     setIsSubmitting(true);
@@ -125,7 +123,7 @@ export const CandidateCompleteProfileScreen = () => {
       if (response.data.success && response.data.user) {
         updateUser(response.data.user);
         useToastStore.getState().show('Profile completed successfully! Welcome to Talentra.', 'success');
-        // Close the Complete Profile screen and navigate back
+        
         navigation.goBack();
       } else {
         setGeneralError('Failed to save profile. Please check inputs and try again.');
@@ -168,7 +166,7 @@ export const CandidateCompleteProfileScreen = () => {
           )}
 
           <View style={styles.formContainer}>
-            {/* Name Input */}
+
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.name ? styles.labelError : null]}>
                 Full Name
@@ -190,7 +188,6 @@ export const CandidateCompleteProfileScreen = () => {
               {errors.name && <Text style={styles.helperErrorText}>{errors.name.message}</Text>}
             </View>
 
-            {/* Phone Input */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.phone ? styles.labelError : null]}>
                 Phone Number
@@ -222,7 +219,6 @@ export const CandidateCompleteProfileScreen = () => {
               {errors.phone && <Text style={styles.helperErrorText}>{errors.phone.message}</Text>}
             </View>
 
-            {/* Location Input */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.location ? styles.labelError : null]}>
                 Location
@@ -244,7 +240,6 @@ export const CandidateCompleteProfileScreen = () => {
               {errors.location && <Text style={styles.helperErrorText}>{errors.location.message}</Text>}
             </View>
 
-            {/* Title Input */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.title ? styles.labelError : null]}>
                 Professional Title
@@ -266,7 +261,6 @@ export const CandidateCompleteProfileScreen = () => {
               {errors.title && <Text style={styles.helperErrorText}>{errors.title.message}</Text>}
             </View>
 
-            {/* Experience Input */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.experience ? styles.labelError : null]}>
                 Years of Experience
@@ -292,7 +286,6 @@ export const CandidateCompleteProfileScreen = () => {
               {errors.experience && <Text style={styles.helperErrorText}>{errors.experience.message}</Text>}
             </View>
 
-            {/* Resume Upload */}
             <View style={styles.inputGroup}>
               <Text style={[styles.label, errors.resume ? styles.labelError : null]}>
                 Resume Document

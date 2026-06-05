@@ -88,7 +88,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
 const getStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.4)', // modern backdrop
+    backgroundColor: 'rgba(15, 23, 42, 0.4)', 
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,

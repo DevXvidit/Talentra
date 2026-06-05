@@ -44,8 +44,8 @@ export const SavedJobsScreen = () => {
   const styles = getStyles(colors, isDark);
 
   const [savedJobs, setSavedJobs] = useState<Job[]>([]);
-  const [loading, setLoading] = useState(true);      // first load
-  const [searching, setSearching] = useState(false);  // search/filter re-fetch
+  const [loading, setLoading] = useState(true);      
+  const [searching, setSearching] = useState(false);  
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
@@ -54,7 +54,6 @@ export const SavedJobsScreen = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const isFirstLoad = React.useRef(true);
 
-  // Pulse animation value for searching skeleton list
   const skeletonAnim = useRef(new Animated.Value(0.3)).current;
 
   useEffect(() => {
@@ -127,25 +126,23 @@ export const SavedJobsScreen = () => {
     }
   }, [search]);
 
-  // Sync bookmarks on first focus only; subsequent focuses are silent
   useFocusEffect(
     useCallback(() => {
       if (isFirstLoad.current) {
         isFirstLoad.current = false;
-        fetchSavedJobs(1, false, true, false); // full skeleton on first load
+        fetchSavedJobs(1, false, true, false); 
       } else {
-        if (!search.trim()) fetchSavedJobs(1, false, false, false); // silent refresh
+        if (!search.trim()) fetchSavedJobs(1, false, false, false); 
       }
     }, [fetchSavedJobs, search])
   );
 
-  // Re-fetch when search changes — show skeleton
   useEffect(() => {
     const timer = setTimeout(() => {
-      fetchSavedJobs(1, false, false, true); // show skeleton
+      fetchSavedJobs(1, false, false, true); 
     }, 500);
     return () => clearTimeout(timer);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  
   }, [search]);
 
   const handleRefresh = () => fetchSavedJobs(1, true);
@@ -173,7 +170,6 @@ export const SavedJobsScreen = () => {
     }
   };
 
-  // Filter handled by backend now
   const filteredJobs = savedJobs;
 
   const renderJobCard = ({ item }: { item: Job }) => (
@@ -303,7 +299,6 @@ export const SavedJobsScreen = () => {
     <SafeAreaView style={styles.container} edges={['top']}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
 
-      {/* Render search header outside FlatList so keyboard focus is stable during list skeleton swap */}
       {renderHeader()}
 
       <FlatList

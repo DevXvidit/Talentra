@@ -91,8 +91,6 @@ export interface Application {
   updatedAt: string;
 }
 
-// ─── Navigation Params ────────────────────────────────────────────────────────
-
 export type AuthStackParamList = {
   [ROUTES.ONBOARDING]: undefined;
   [ROUTES.LOGIN]: { role?: UserRole };

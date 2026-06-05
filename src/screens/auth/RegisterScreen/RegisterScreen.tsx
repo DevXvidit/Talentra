@@ -148,10 +148,10 @@ export const RegisterScreen = () => {
       try {
         await GoogleSignin.hasPlayServices();
         try {
-          // Force sign out from previous Google session to ensure account chooser displays
+          
           await GoogleSignin.signOut();
         } catch (e) {
-          // Ignore error if no user was signed in
+          
         }
         const response = await GoogleSignin.signIn();
 

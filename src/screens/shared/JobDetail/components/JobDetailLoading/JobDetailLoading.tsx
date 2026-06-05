@@ -27,16 +27,15 @@ export const JobDetailLoading = () => {
 
   return (
     <View style={styles.container}>
-      {/* Back Button Skeleton */}
+
       <View style={styles.header}>
         <Animated.View style={[styles.backButtonSkeleton, { opacity: animatedValue }]} />
         <Animated.View style={[styles.headerTitleSkeleton, { opacity: animatedValue }]} />
         <Animated.View style={[styles.bookmarkSkeleton, { opacity: animatedValue }]} />
       </View>
 
-      {/* Main Content Skeleton */}
       <View style={styles.content}>
-        {/* Company Logo & Job Title Section */}
+
         <View style={styles.heroSection}>
           <Animated.View style={[styles.logoSkeleton, { opacity: animatedValue }]} />
           <Animated.View style={[styles.titleSkeleton, { opacity: animatedValue }]} />
@@ -44,7 +43,6 @@ export const JobDetailLoading = () => {
           <Animated.View style={[styles.locationSkeleton, { opacity: animatedValue }]} />
         </View>
 
-        {/* Metadata Badges Card */}
         <Animated.View style={[styles.metaCardSkeleton, { opacity: animatedValue }]}>
           <View style={styles.metaRow}>
             <View style={styles.metaCol} />
@@ -53,7 +51,6 @@ export const JobDetailLoading = () => {
           </View>
         </Animated.View>
 
-        {/* Long description blocks */}
         <View style={styles.descriptionSection}>
           <Animated.View style={[styles.sectionHeadingSkeleton, { opacity: animatedValue }]} />
           <Animated.View style={[styles.paragraphLineSkeleton, { width: '100%', opacity: animatedValue }]} />
@@ -71,7 +68,6 @@ export const JobDetailLoading = () => {
         </View>
       </View>
 
-      {/* Sticky Bottom Actions Skeleton */}
       <View style={styles.bottomBar}>
         <Animated.View style={[styles.buttonSkeleton, { opacity: animatedValue }]} />
       </View>

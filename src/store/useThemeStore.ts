@@ -15,7 +15,7 @@ const getInitialTheme = (): ThemeMode => {
   if (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'system') {
     return storedTheme;
   }
-  return 'light'; // Default to light mode
+  return 'light'; 
 };
 
 export const useThemeStore = create<ThemeState>((set) => ({

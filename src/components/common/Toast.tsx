@@ -92,7 +92,7 @@ export const Toast = () => {
 
   useEffect(() => {
     if (visible) {
-      // Slide in
+      
       Animated.parallel([
         Animated.timing(slideAnim, {
           toValue: insets.top > 0 ? insets.top + 10 : 20,
@@ -106,7 +106,6 @@ export const Toast = () => {
         }),
       ]).start();
 
-      // Auto hide after 3.5 seconds
       const timer = setTimeout(() => {
         dismiss();
       }, 3500);

@@ -46,17 +46,15 @@ export const SavedJobsLoading = () => {
 
   return (
     <View style={styles.container}>
-      {/* Header Skeleton */}
+
       <View style={styles.header}>
         <Animated.View style={[styles.backSkeleton, { opacity: animatedValue }]} />
         <Animated.View style={[styles.headerTitleSkeleton, { opacity: animatedValue }]} />
         <View style={styles.placeholder} />
       </View>
 
-      {/* Search Skeleton */}
       <Animated.View style={[styles.searchSkeleton, { opacity: animatedValue }]} />
 
-      {/* List Skeletons */}
       <View style={styles.listContainer}>
         {[1, 2, 3].map((i) => (
           <View key={i} style={styles.cardSkeleton}>

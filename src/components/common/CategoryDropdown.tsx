@@ -33,7 +33,6 @@ export const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   const { colors, isDark } = useTheme();
   const styles = getStyles(colors, isDark);
 
-  // Fetch categories from backend API
   useEffect(() => {
     const fetchCategories = async () => {
       setLoading(true);
@@ -41,7 +40,7 @@ export const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
         const response = await apiClient.get('/jobs/categories');
         if (response.data?.success && Array.isArray(response.data?.data)) {
           setAllCategories(response.data.data);
-          // Set initial batch
+          
           setDisplayedCategories(response.data.data.slice(0, itemsPerPage));
         }
       } catch (error) {
@@ -54,7 +53,6 @@ export const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
     fetchCategories();
   }, []);
 
-  // Load more items (emulate scroll pagination)
   const handleLoadMore = () => {
     if (displayedCategories.length >= allCategories.length) return;
     
@@ -68,7 +66,7 @@ export const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
       setDisplayedCategories(nextBatch);
       setPage(nextPage);
       setLoading(false);
-    }, 400); // Small delay for UX transition
+    }, 400); 
   };
 
   const handleSelect = (category: string) => {
@@ -100,7 +98,7 @@ export const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            {/* Header */}
+
             <View style={styles.modalHeader}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                 <Tag size={18} color={colors.primary} />
@@ -115,7 +113,6 @@ export const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
               </TouchableOpacity>
             </View>
 
-            {/* List */}
             <FlatList
               data={displayedCategories}
               keyExtractor={(item) => item}

@@ -22,7 +22,6 @@ export const SavedJobsError: React.FC<SavedJobsErrorProps> = ({
     <View style={styles.container}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
 
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={onBack} activeOpacity={0.7}>
           <ChevronLeft color={colors.foreground} size={24} />
@@ -31,7 +30,6 @@ export const SavedJobsError: React.FC<SavedJobsErrorProps> = ({
         <View style={styles.placeholder} />
       </View>
 
-      {/* Content */}
       <View style={styles.content}>
         <View style={styles.iconCircle}>
           <RefreshCw color={colors.error} size={32} />
@@ -39,8 +37,6 @@ export const SavedJobsError: React.FC<SavedJobsErrorProps> = ({
 
         <Text style={styles.title}>Bookmarks didn't load</Text>
         <Text style={styles.subtitle}>{message}</Text>
-
-        {/* Action Buttons */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.retryButton} onPress={onRetry} activeOpacity={0.85}>
             <RefreshCw color={colors.primaryForeground} size={16} style={styles.icon} />
@@ -52,16 +48,12 @@ export const SavedJobsError: React.FC<SavedJobsErrorProps> = ({
             <Text style={styles.secondaryButtonText}>Back to Home</Text>
           </TouchableOpacity>
         </View>
-
-        {/* Warning Notification Block */}
         <View style={styles.warningBox}>
           <AlertTriangle size={18} color={isDark ? '#fca5a5' : '#9B1C1C'} />
           <Text style={styles.warningText}>
             Offline Mode: Some bookmarked entries may not reflect local changes until you re-establish sync.
           </Text>
         </View>
-
-        {/* Footer Error Details */}
         <View style={styles.errorFooter}>
           <Text style={styles.supportId}>If the problem persists, try logging out and logging back in.</Text>
         </View>

@@ -97,7 +97,7 @@ export const getStyles = (colors: ThemeColors, isDark: boolean) => StyleSheet.cr
     backgroundColor: colors.primary,
     opacity: 1,
   },
-  // legacy step styles (kept for type safety)
+  
   stepItem: { alignItems: 'center', gap: 4 },
   stepCircle: { width: 28, height: 28, borderRadius: 14, backgroundColor: colors.border, alignItems: 'center', justifyContent: 'center' },
   stepCircleActive: { backgroundColor: colors.primary },

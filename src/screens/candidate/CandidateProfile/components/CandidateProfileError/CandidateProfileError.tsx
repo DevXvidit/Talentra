@@ -26,7 +26,6 @@ export const CandidateProfileError: React.FC<CandidateProfileErrorProps> = ({
     <View style={styles.container}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.background} />
 
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={onBack} activeOpacity={0.7}>
           <ChevronLeft color={colors.foreground} size={24} />
@@ -35,7 +34,6 @@ export const CandidateProfileError: React.FC<CandidateProfileErrorProps> = ({
         <View style={styles.placeholder} />
       </View>
 
-      {/* Content */}
       <View style={styles.content}>
         <View style={styles.iconCircle}>
           <AlertCircle color={colors.error} size={36} />
@@ -43,8 +41,6 @@ export const CandidateProfileError: React.FC<CandidateProfileErrorProps> = ({
 
         <Text style={styles.title}>Couldn't fetch your profile</Text>
         <Text style={styles.subtitle}>{message}</Text>
-
-        {/* Action Buttons */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.primaryButton} onPress={onRefresh} activeOpacity={0.85}>
             <RefreshCw color={colors.primaryForeground} size={16} style={styles.icon} />
@@ -63,8 +59,6 @@ export const CandidateProfileError: React.FC<CandidateProfileErrorProps> = ({
             </TouchableOpacity>
           )}
         </View>
-
-        {/* Highlighted Warning Block */}
         <View style={styles.errorBox}>
           <AlertCircle size={18} color={isDark ? '#fca5a5' : '#9B1C1C'} />
           <View style={styles.errorBoxTextContainer}>
