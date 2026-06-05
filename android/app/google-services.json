@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "944946881664",
+    "project_id": "talentra-5f794",
+    "storage_bucket": "talentra-5f794.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:944946881664:android:7940991843eb7a9879b265",
+        "android_client_info": {
+          "package_name": "com.talentraapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "944946881664-9eh7nttpeo5jdslhkq9sv69bdpb7emt3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.talentraapp",
+            "certificate_hash": "9d557864ab1bdc1cbafe111886c813dac47f33a8"
+          }
+        },
+        {
+          "client_id": "944946881664-tl77hocrhrlh7g57f0feurhn0qpajpda.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.talentraapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "944946881664-ejfv67gtvpgu3ns55khvq0sn9v9d0th4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGJtvXDSP_7ojeIrvKyf5iVXGtSU2yYSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "944946881664-ejfv67gtvpgu3ns55khvq0sn9v9d0th4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "944946881664-abq89r0eio2mnecnmtfno0k9ccr84c4h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.talentra.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
