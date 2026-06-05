@@ -13,7 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Briefcase, MapPin, ChevronRight, IndianRupee, User } from 'lucide-react-native';
 import { ROUTES } from '../../../constants/screens';
-import { apiClient } from '../../../services/apiClient';
+import { recruiterService } from '../../../services/recruiterService';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { Company } from '../../../types';
 import { getStyles } from './RecruiterJobFeedScreen.styles';
@@ -67,16 +67,10 @@ export const RecruiterJobFeedScreen = () => {
     }
 
     try {
-      const response = await apiClient.get('/recruiter/jobs', { params: { page: pageNum, limit: 10 } });
-      const fetchedJobs = response.data.data || [];
-      const fetchedPagination = response.data.pagination || { totalPages: 1 };
-      const fetchedStats = response.data.stats || {
-        activeJobsCount: 0,
-        totalJobsCount: 0,
-        totalFilledPositions: 0,
-        totalPositions: 0,
-        totalApplicants: 0,
-      };
+      const response = await recruiterService.fetchJobs({ page: pageNum, limit: 10 });
+      const fetchedJobs = response.jobs;
+      const fetchedPagination = response.pagination;
+      const fetchedStats = response.stats;
 
       if (pageNum === 1) {
         setJobs(fetchedJobs);

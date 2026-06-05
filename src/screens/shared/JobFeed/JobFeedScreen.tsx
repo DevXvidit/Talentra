@@ -20,7 +20,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { JOB_CATEGORIES } from '../../../constants/jobs';
 import { ROUTES } from '../../../constants/screens';
-import { apiClient } from '../../../services/apiClient';
+import { jobService } from '../../../services/jobService';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { Job, RootStackParamList } from '../../../types';
 import { getStyles } from './JobFeedScreen.styles';
@@ -172,16 +172,15 @@ export const JobFeedScreen = () => {
       if (selCat) params.category = selCat;
       if (selType !== 'All') params.type = selType;
 
-      const response = await apiClient.get('/jobs', { params });
-      const { jobs: newJobs, pagination } = response.data.data;
+      const response = await jobService.fetchJobs(params);
 
       if (pageNum === 1) {
-        setJobs(newJobs);
+        setJobs(response.jobs);
       } else {
-        setJobs(prev => [...prev, ...newJobs]);
+        setJobs(prev => [...prev, ...response.jobs]);
       }
       setPage(pageNum);
-      setTotalPages(pagination.totalPages);
+      setTotalPages(response.pagination.totalPages);
     } catch (err: any) {
       console.warn('Failed to fetch jobs:', err);
       if (pageNum === 1) {
@@ -243,9 +242,8 @@ export const JobFeedScreen = () => {
 
   const handleToggleBookmark = async (jobId: string) => {
     try {
-      const response = await apiClient.post(`/jobs/${jobId}/bookmark`);
-      const updatedIsBookmarked = response.data.isBookmarked;
-      setJobs(prev => prev.map(job => job.id === jobId ? { ...job, isBookmarked: updatedIsBookmarked } : job));
+      const result = await jobService.toggleBookmark(jobId);
+      setJobs(prev => prev.map(job => job.id === jobId ? { ...job, isBookmarked: result.isBookmarked } : job));
     } catch (err) {
       console.warn('Failed to toggle bookmark:', err);
     }

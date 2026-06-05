@@ -10,7 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import { ChevronDown, X, Check, Tag } from 'lucide-react-native';
-import { apiClient } from '../../services/apiClient';
+import { jobService } from '../../services/jobService';
 import { ThemeColors } from '../../constants/theme';
 import { useTheme } from '../../hooks/useTheme';
 
@@ -37,12 +37,9 @@ export const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
     const fetchCategories = async () => {
       setLoading(true);
       try {
-        const response = await apiClient.get('/jobs/categories');
-        if (response.data?.success && Array.isArray(response.data?.data)) {
-          setAllCategories(response.data.data);
-          
-          setDisplayedCategories(response.data.data.slice(0, itemsPerPage));
-        }
+        const categories = await jobService.fetchCategories();
+        setAllCategories(categories);
+        setDisplayedCategories(categories.slice(0, itemsPerPage));
       } catch (error) {
         console.warn('Failed to fetch categories:', error);
       } finally {

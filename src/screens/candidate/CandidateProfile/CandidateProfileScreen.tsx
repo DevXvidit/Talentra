@@ -35,8 +35,8 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { useToastStore } from '../../../store/useToastStore';
 import { useTheme } from '../../../hooks/useTheme';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { apiClient } from '../../../services/apiClient';
 import { authService } from '../../../services/authService';
+import { candidateService } from '../../../services/candidateService';
 import { ROUTES } from '../../../constants/screens';
 import { getStyles } from './CandidateProfileScreen.styles';
 import { ResumeViewerModal } from '../../../components/common/ResumeViewerModal';
@@ -98,21 +98,14 @@ export const CandidateProfileScreen = () => {
       setLoading(true);
       const asset = result.assets[0];
 
-      const formData = new FormData();
-      formData.append('avatar', {
+      const response = await candidateService.updateAvatar({
         uri: asset.uri!,
         name: asset.fileName || 'avatar.jpg',
         type: asset.type || 'image/jpeg',
-      } as any);
-
-      const response = await apiClient.patch('/candidate/profile', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
       });
 
-      if (response.data.success && response.data.user) {
-        updateUser(response.data.user);
+      if (response.success && response.user) {
+        updateUser(response.user);
         useToastStore.getState().show('Profile picture updated successfully!', 'success');
         fetchProfileStats();
       } else {
@@ -140,25 +133,21 @@ export const CandidateProfileScreen = () => {
       if (!result) return;
 
       setLoading(true);
-      const formData = new FormData();
-      formData.append('name', user?.name || '');
-      formData.append('phone', user?.phone || '');
-      formData.append('location', user?.location || '');
-      formData.append('experience', String(user?.experience ?? 0));
-      formData.append('resume', {
-        uri: result.uri,
-        name: result.name || 'resume.pdf',
-        type: result.type || 'application/pdf',
-      } as any);
 
-      const response = await apiClient.patch('/candidate/profile', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+      const response = await candidateService.updateResume({
+        name: user?.name || '',
+        phone: user?.phone || '',
+        location: user?.location || '',
+        experience: String(user?.experience ?? 0),
+        resume: {
+          uri: result.uri,
+          name: result.name || 'resume.pdf',
+          type: result.type || 'application/pdf',
         },
       });
 
-      if (response.data.success && response.data.user) {
-        updateUser(response.data.user);
+      if (response.success && response.user) {
+        updateUser(response.user);
         useToastStore.getState().show('Resume updated successfully!', 'success');
         fetchProfileStats();
       } else {

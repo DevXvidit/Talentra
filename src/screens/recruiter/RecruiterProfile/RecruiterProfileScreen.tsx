@@ -15,7 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { User, LogOut, ChevronRight, Settings, Shield, HelpCircle, X } from 'lucide-react-native';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { apiClient } from '../../../services/apiClient';
+import { recruiterService } from '../../../services/recruiterService';
 import { ROUTES } from '../../../constants/screens';
 import { Company } from '../../../types';
 import { getStyles } from './RecruiterProfileScreen.styles';
@@ -37,11 +37,9 @@ export const RecruiterProfileScreen = () => {
   const fetchRecruiterStats = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await apiClient.get('/recruiter/jobs');
-      const myJobs = response.data.data || [];
-      setJobsCount(myJobs.length);
-      const totalApps = myJobs.reduce((total: number, job: any) => total + (job.applicantCount || 0), 0);
-      setApplicationsCount(totalApps);
+      const stats = await recruiterService.fetchStats();
+      setJobsCount(stats.jobsCount);
+      setApplicationsCount(stats.applicationsCount);
     } catch (err: any) {
       console.warn('Failed to load recruiter stats:', err);
     } finally {
