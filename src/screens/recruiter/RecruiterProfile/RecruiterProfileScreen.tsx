@@ -24,7 +24,7 @@ import { useTheme } from '../../../hooks/useTheme';
 export const RecruiterProfileScreen = () => {
   const navigation = useNavigation<any>();
   const { user, logout } = useAuthStore();
-  const { theme, setTheme, colors, isDark } = useTheme();
+  const { setTheme, colors, isDark } = useTheme();
   const styles = getStyles(colors, isDark);
 
   const [jobsCount, setJobsCount] = useState(0);
@@ -32,7 +32,7 @@ export const RecruiterProfileScreen = () => {
   const [privacyVisible, setPrivacyVisible] = useState(false);
   const [supportVisible, setSupportVisible] = useState(false);
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   const fetchRecruiterStats = useCallback(async () => {
     setLoading(true);

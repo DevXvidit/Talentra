@@ -59,11 +59,11 @@ export const JobDetailScreen = () => {
   const [appStatusLocal, setAppStatusLocal] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   
-  const [applicants, setApplicants] = useState<any[]>([]);
-  const [loadingApplicants, setLoadingApplicants] = useState(false);
-  const [applicantsPage, setApplicantsPage] = useState(1);
-  const [applicantsTotalPages, setApplicantsTotalPages] = useState(1);
-  const [loadingMoreApplicants, setLoadingMoreApplicants] = useState(false);
+  const [_applicants, setApplicants] = useState<any[]>([]);
+  const [_loadingApplicants, setLoadingApplicants] = useState(false);
+  const [_applicantsPage, setApplicantsPage] = useState(1);
+  const [_applicantsTotalPages, setApplicantsTotalPages] = useState(1);
+  const [_loadingMoreApplicants, setLoadingMoreApplicants] = useState(false);
 
   const [completeProfileVisible, setCompleteProfileVisible] = useState(false);
   const [applyResumeVisible, setApplyResumeVisible] = useState(false);
@@ -153,7 +153,7 @@ export const JobDetailScreen = () => {
         response.data.isBookmarked ? 'Job added to bookmarks!' : 'Job removed from bookmarks.',
         'success'
       );
-    } catch (err: any) {
+    } catch (_err: any) {
       
       setJobData((prev: any) => ({ ...prev, isBookmarked: previousBookmarked }));
       useToastStore.getState().show('Failed to update bookmark status.', 'error');

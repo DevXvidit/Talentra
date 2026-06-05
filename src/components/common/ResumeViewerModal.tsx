@@ -29,7 +29,7 @@ export const ResumeViewerModal: React.FC<ResumeViewerModalProps> = ({
   onClose,
   title = 'Resume Viewer',
 }) => {
-  const [loading, setLoading] = React.useState(true);
+  const [_loading, setLoading] = React.useState(true);
   const webViewRef = React.useRef<WebView>(null);
   const { colors, isDark } = useTheme();
   const styles = getStyles(colors, isDark);

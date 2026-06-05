@@ -26,7 +26,7 @@ export const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   const [modalVisible, setModalVisible] = useState(false);
   const [allCategories, setAllCategories] = useState<string[]>([]);
   const [displayedCategories, setDisplayedCategories] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [_loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const itemsPerPage = 5;
 

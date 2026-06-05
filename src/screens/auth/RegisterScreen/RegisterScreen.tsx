@@ -66,7 +66,6 @@ export const RegisterScreen = () => {
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
     watch,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -79,7 +78,6 @@ export const RegisterScreen = () => {
     },
   });
 
-  const selectedRole = watch('role');
   const watchedPassword = watch('password') || '';
 
   const getPasswordStrength = (pass: string) => {
@@ -150,7 +148,7 @@ export const RegisterScreen = () => {
         try {
           
           await GoogleSignin.signOut();
-        } catch (e) {
+        } catch (_e) {
           
         }
         const response = await GoogleSignin.signIn();

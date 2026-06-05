@@ -16,7 +16,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Camera, ChevronLeft, User as UserIcon, UploadCloud, AlertCircle } from 'lucide-react-native';
-import { pick, types, isErrorWithCode, errorCodes } from '@react-native-documents/picker';
+import { isErrorWithCode, errorCodes } from '@react-native-documents/picker';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { apiClient } from '../../../services/apiClient';

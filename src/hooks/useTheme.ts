@@ -1,5 +1,5 @@
 import { useColorScheme } from 'react-native';
-import { useThemeStore, ThemeMode } from '../store/useThemeStore';
+import { useThemeStore } from '../store/useThemeStore';
 import { LIGHT_COLORS, DARK_COLORS, ThemeColors } from '../constants/theme';
 
 export const useTheme = () => {

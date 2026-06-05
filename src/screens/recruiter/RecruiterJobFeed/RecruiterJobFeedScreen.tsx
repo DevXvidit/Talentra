@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -28,7 +28,7 @@ const timeAgo = (dateStr: string) => {
     if (diffDays <= 1) return 'Today';
     if (diffDays === 2) return 'Yesterday';
     return `${diffDays} days ago`;
-  } catch (e) {
+  } catch {
     return 'Recently';
   }
 };

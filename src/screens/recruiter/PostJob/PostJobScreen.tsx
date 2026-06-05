@@ -84,7 +84,7 @@ export const PostJobScreen = () => {
             setTotalPositions(String(job.totalPositions || 1));
             setFilledPositions(job.filledPositions || 0);
           }
-        } catch (err: any) {
+        } catch (_err: any) {
           useToastStore.getState().show('Failed to fetch job details.', 'error');
         } finally {
           setLoading(false);

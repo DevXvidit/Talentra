@@ -6,7 +6,6 @@ import {
   ScrollView,
   StatusBar,
   Image,
-  Alert,
   Switch,
   Modal,
   TouchableWithoutFeedback,
@@ -22,12 +21,10 @@ import {
   Briefcase,
   FileText,
   RotateCw,
-  Bell,
   Shield,
   Moon,
   HelpCircle,
   LogOut,
-  Settings,
   Camera,
   ChevronRight,
   X,
@@ -46,7 +43,6 @@ import { ResumeViewerModal } from '../../../components/common/ResumeViewerModal'
 import { API_BASE_URL } from '../../../constants';
 
 import CandidateProfileLoading from './components/CandidateProfileLoading';
-import CandidateProfileError from './components/CandidateProfileError';
 
 export const CandidateProfileScreen = () => {
   const navigation = useNavigation<any>();
@@ -54,7 +50,7 @@ export const CandidateProfileScreen = () => {
 
   const [stats, setStats] = useState<{ applied: number; hired: number; saved: number } | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [_error, setError] = useState<string | null>(null);
 
   const [privacyVisible, setPrivacyVisible] = useState(false);
   const [supportVisible, setSupportVisible] = useState(false);
@@ -203,10 +199,6 @@ export const CandidateProfileScreen = () => {
   const handleLogout = () => {
     logout();
     useToastStore.getState().show('Logged out successfully.', 'info');
-  };
-
-  const handleBack = () => {
-    navigation.goBack();
   };
 
   if (loading) {

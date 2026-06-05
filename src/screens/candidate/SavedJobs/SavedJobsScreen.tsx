@@ -12,7 +12,7 @@ import {
   Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Bookmark, MapPin, Briefcase, BookmarkX, Search, ChevronLeft, IndianRupee } from 'lucide-react-native';
+import { Bookmark, MapPin, Briefcase, BookmarkX, Search, IndianRupee } from 'lucide-react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ROUTES } from '../../../constants/screens';
@@ -33,7 +33,7 @@ const timeAgo = (dateStr: string) => {
     if (diffDays <= 1) return 'Today';
     if (diffDays === 2) return 'Yesterday';
     return `${diffDays} days ago`;
-  } catch (e) {
+  } catch {
     return 'Recently';
   }
 };
