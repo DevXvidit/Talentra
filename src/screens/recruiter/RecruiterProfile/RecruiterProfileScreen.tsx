@@ -15,7 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { User, LogOut, ChevronRight, Settings, Shield, HelpCircle, X } from 'lucide-react-native';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { apiClient } from '../../../services/apiClient';
+import { recruiterService } from '../../../services/recruiterService';
 import { ROUTES } from '../../../constants/screens';
 import { Company } from '../../../types';
 import { getStyles } from './RecruiterProfileScreen.styles';
@@ -24,24 +24,21 @@ import { useTheme } from '../../../hooks/useTheme';
 export const RecruiterProfileScreen = () => {
   const navigation = useNavigation<any>();
   const { user, logout } = useAuthStore();
-  const { theme, setTheme, colors, isDark } = useTheme();
+  const { setTheme, colors, isDark } = useTheme();
   const styles = getStyles(colors, isDark);
 
   const [jobsCount, setJobsCount] = useState(0);
   const [applicationsCount, setApplicationsCount] = useState(0);
   const [privacyVisible, setPrivacyVisible] = useState(false);
   const [supportVisible, setSupportVisible] = useState(false);
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   const fetchRecruiterStats = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await apiClient.get('/recruiter/jobs');
-      const myJobs = response.data.data || [];
-      setJobsCount(myJobs.length);
-      const totalApps = myJobs.reduce((total: number, job: any) => total + (job.applicantCount || 0), 0);
-      setApplicationsCount(totalApps);
+      const stats = await recruiterService.fetchStats();
+      setJobsCount(stats.jobsCount);
+      setApplicationsCount(stats.applicationsCount);
     } catch (err: any) {
       console.warn('Failed to load recruiter stats:', err);
     } finally {
@@ -188,18 +185,6 @@ export const RecruiterProfileScreen = () => {
                     Talentra takes your privacy very seriously. We use industry-standard encryption protocols to protect your personal details, credentials, and uploaded documents.
                   </Text>
 
-                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: colors.muted, padding: 16, borderRadius: 12, marginTop: 12 }}>
-                    <View style={{ flex: 1, paddingRight: 12 }}>
-                      <Text style={{ fontSize: 14, fontWeight: '600', color: colors.foreground, marginBottom: 4, fontFamily: 'Inter' }}>Two-Factor Authentication</Text>
-                      <Text style={{ fontSize: 12, color: colors.mutedForeground, fontFamily: 'Inter' }}>Require a verification code when signing in.</Text>
-                    </View>
-                    <Switch
-                      value={twoFactorEnabled}
-                      onValueChange={setTwoFactorEnabled}
-                      trackColor={{ false: colors.border, true: colors.secondary }}
-                      thumbColor={Platform.OS === 'android' ? colors.primary : undefined}
-                    />
-                  </View>
 
                   <Text style={styles.modalSubTitle}>Hiring Visibility</Text>
                   <Text style={styles.modalBodyText}>

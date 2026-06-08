@@ -20,7 +20,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { JOB_CATEGORIES } from '../../../constants/jobs';
 import { ROUTES } from '../../../constants/screens';
-import { apiClient } from '../../../services/apiClient';
+import { jobService } from '../../../services/jobService';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { Job, RootStackParamList } from '../../../types';
 import { getStyles } from './JobFeedScreen.styles';
@@ -39,7 +39,7 @@ const timeAgo = (dateStr: string) => {
     if (diffDays <= 1) return 'Today';
     if (diffDays === 2) return 'Yesterday';
     return `${diffDays} days ago`;
-  } catch (e) {
+  } catch {
     return 'Recently';
   }
 };
@@ -66,8 +66,8 @@ export const JobFeedScreen = () => {
   const showCompletionBanner = !user?.isProfileComplete && completionPercentage < 100;
 
   const [jobs, setJobs] = useState<Job[]>([]);
-  const [loading, setLoading] = useState(true);   
-  const [searching, setSearching] = useState(false); 
+  const [loading, setLoading] = useState(true);
+  const [searching, setSearching] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -87,7 +87,7 @@ export const JobFeedScreen = () => {
 
   useEffect(() => {
     let animationLoop: Animated.CompositeAnimation | null = null;
-    
+
     if (searching) {
       animationLoop = Animated.loop(
         Animated.sequence([
@@ -172,16 +172,15 @@ export const JobFeedScreen = () => {
       if (selCat) params.category = selCat;
       if (selType !== 'All') params.type = selType;
 
-      const response = await apiClient.get('/jobs', { params });
-      const { jobs: newJobs, pagination } = response.data.data;
+      const response = await jobService.fetchJobs(params);
 
       if (pageNum === 1) {
-        setJobs(newJobs);
+        setJobs(response.jobs);
       } else {
-        setJobs(prev => [...prev, ...newJobs]);
+        setJobs(prev => [...prev, ...response.jobs]);
       }
       setPage(pageNum);
-      setTotalPages(pagination.totalPages);
+      setTotalPages(response.pagination.totalPages);
     } catch (err: any) {
       console.warn('Failed to fetch jobs:', err);
       if (pageNum === 1) {
@@ -201,7 +200,7 @@ export const JobFeedScreen = () => {
     useCallback(() => {
       if (isFirstLoad.current) {
         isFirstLoad.current = false;
-        fetchJobs(1, false, true, false); 
+        fetchJobs(1, false, true, false);
       } else {
         const { search: s, selectedCategory: cat, selectedType: type } = filtersRef.current;
         const hasActiveFilters = !!(s.trim() || cat || type !== 'All');
@@ -215,18 +214,18 @@ export const JobFeedScreen = () => {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
     debounceTimer.current = setTimeout(() => {
       filtersRef.current = { ...filtersRef.current, search };
-      fetchJobs(1, false, false, true); 
+      fetchJobs(1, false, false, true);
     }, 600);
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
     };
-  
+
   }, [search]);
 
   useEffect(() => {
     filtersRef.current = { ...filtersRef.current, selectedCategory, selectedType };
     fetchJobs(1, false, false, true);
-  
+
   }, [selectedCategory, selectedType]);
 
   const handleRefresh = () => fetchJobs(1, true);
@@ -243,9 +242,8 @@ export const JobFeedScreen = () => {
 
   const handleToggleBookmark = async (jobId: string) => {
     try {
-      const response = await apiClient.post(`/jobs/${jobId}/bookmark`);
-      const updatedIsBookmarked = response.data.isBookmarked;
-      setJobs(prev => prev.map(job => job.id === jobId ? { ...job, isBookmarked: updatedIsBookmarked } : job));
+      const result = await jobService.toggleBookmark(jobId);
+      setJobs(prev => prev.map(job => job.id === jobId ? { ...job, isBookmarked: result.isBookmarked } : job));
     } catch (err) {
       console.warn('Failed to toggle bookmark:', err);
     }
@@ -451,13 +449,13 @@ export const JobFeedScreen = () => {
             <Search size={18} color={colors.mutedForeground} />
             <TextInput
               style={styles.searchInput}
-              placeholder="Search jobs, titles, skills..."
+              placeholder="Search Job Roles"
               placeholderTextColor={colors.mutedForeground}
               value={search}
               onChangeText={setSearch}
               returnKeyType="search"
               onSubmitEditing={() => {
-                
+
                 filtersRef.current = { ...filtersRef.current, search };
                 fetchJobs(1);
               }}
@@ -487,8 +485,8 @@ export const JobFeedScreen = () => {
       <FlatList
         data={searching ? ([1, 2, 3] as any[]) : (displayedJobs as any[])}
         keyExtractor={(item, index) => (searching ? `skeleton_${index}` : (item as Job).id || String(index))}
-        renderItem={searching 
-          ? () => <JobCardSkeleton animatedValue={skeletonAnim} colors={colors} style={styles.jobCard} /> 
+        renderItem={searching
+          ? () => <JobCardSkeleton animatedValue={skeletonAnim} colors={colors} style={styles.jobCard} />
           : (renderJobCard as any)
         }
         ListEmptyComponent={searching ? null : renderEmpty}

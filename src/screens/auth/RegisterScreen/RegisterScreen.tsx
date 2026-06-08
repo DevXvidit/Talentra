@@ -66,7 +66,6 @@ export const RegisterScreen = () => {
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
     watch,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -79,7 +78,6 @@ export const RegisterScreen = () => {
     },
   });
 
-  const selectedRole = watch('role');
   const watchedPassword = watch('password') || '';
 
   const getPasswordStrength = (pass: string) => {
@@ -150,7 +148,7 @@ export const RegisterScreen = () => {
         try {
           
           await GoogleSignin.signOut();
-        } catch (e) {
+        } catch (_e) {
           
         }
         const response = await GoogleSignin.signIn();
@@ -215,6 +213,7 @@ export const RegisterScreen = () => {
                       value === USER_ROLES.CANDIDATE && styles.roleOptionActiveCandidate,
                     ]}
                     activeOpacity={0.8}
+                    disabled={loading}
                     onPress={() => onChange(USER_ROLES.CANDIDATE)}
                   >
                     <Text style={[
@@ -230,6 +229,7 @@ export const RegisterScreen = () => {
                       value === USER_ROLES.RECRUITER && styles.roleOptionActiveRecruiter,
                     ]}
                     activeOpacity={0.8}
+                    disabled={loading}
                     onPress={() => onChange(USER_ROLES.RECRUITER)}
                   >
                     <Text style={[
@@ -268,6 +268,7 @@ export const RegisterScreen = () => {
                     onChangeText={onChange}
                     value={value}
                     autoCapitalize="words"
+                    editable={!loading}
                   />
                 </View>
               )}
@@ -300,6 +301,7 @@ export const RegisterScreen = () => {
                     value={value}
                     autoCapitalize="none"
                     keyboardType="email-address"
+                    editable={!loading}
                   />
                 </View>
               )}
@@ -333,6 +335,7 @@ export const RegisterScreen = () => {
                     value={value}
                     autoCapitalize="none"
                     textContentType="oneTimeCode"
+                    editable={!loading}
                   />
                   <TouchableOpacity
                     onPress={() => setSecurePassword(!securePassword)}
@@ -395,6 +398,7 @@ export const RegisterScreen = () => {
                     value={value}
                     autoCapitalize="none"
                     textContentType="oneTimeCode"
+                    editable={!loading}
                   />
                   <TouchableOpacity
                     onPress={() => setSecureConfirmPassword(!secureConfirmPassword)}
@@ -416,6 +420,7 @@ export const RegisterScreen = () => {
           <TouchableOpacity
             style={styles.termsRow}
             activeOpacity={0.8}
+            disabled={loading}
             onPress={() => setTermsChecked(!termsChecked)}
           >
             <View style={[styles.checkbox, termsChecked && styles.checkboxChecked]}>
@@ -453,8 +458,9 @@ export const RegisterScreen = () => {
 
           <View style={styles.socialRow}>
             <TouchableOpacity
-              style={styles.socialButton}
+              style={[styles.socialButton, loading && { opacity: 0.5 }]}
               activeOpacity={0.8}
+              disabled={loading}
               onPress={() => handleSocialSignIn(AUTH_PROVIDERS.GOOGLE)}
             >
               <GoogleLogo size={16} />
@@ -476,6 +482,7 @@ export const RegisterScreen = () => {
             <Text style={styles.toggleText}>Already have an account?</Text>
             <TouchableOpacity
               activeOpacity={0.7}
+              disabled={loading}
               onPress={() => navigation.navigate(ROUTES.LOGIN, { role: USER_ROLES.CANDIDATE })}
             >
               <Text style={styles.toggleLink}> Sign in</Text>

@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute, useNavigation, useFocusEffect } from '@react-navigation/native';
 import { ChevronLeft, ChevronRight, UserCircle2 } from 'lucide-react-native';
 import { ROUTES } from '../../../constants/screens';
-import { apiClient } from '../../../services/apiClient';
+import { recruiterService } from '../../../services/recruiterService';
 import { getStyles } from './JobApplicantsListScreen.styles';
 import { useTheme } from '../../../hooks/useTheme';
 
@@ -28,20 +28,18 @@ export const JobApplicantsListScreen = () => {
     else setLoadingMore(true);
 
     try {
-      const response = await apiClient.get(`/recruiter/jobs/${jobId}/applicants`, { params: { page: pageNum, limit: 15 } });
-      const newApplicants = response.data.data || [];
-      const pagination = response.data.pagination || { totalPages: 1 };
-      if (response.data.job) {
-        setJobMeta(response.data.job);
+      const response = await recruiterService.fetchApplicants({ jobId, page: pageNum, limit: 15 });
+      if (response.job) {
+        setJobMeta(response.job);
       }
 
       if (pageNum === 1) {
-        setApplicants(newApplicants);
+        setApplicants(response.applicants);
       } else {
-        setApplicants(prev => [...prev, ...newApplicants]);
+        setApplicants(prev => [...prev, ...response.applicants]);
       }
       setPage(pageNum);
-      setTotalPages(pagination.totalPages);
+      setTotalPages(response.pagination.totalPages);
     } catch (err) {
       console.warn('Failed to load applicants:', err);
     } finally {

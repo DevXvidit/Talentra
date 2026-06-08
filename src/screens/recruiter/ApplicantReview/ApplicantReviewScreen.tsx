@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { ChevronLeft, Check, X, FileText, MapPin, Briefcase, Mail, Phone } from 'lucide-react-native';
 import { API_BASE_URL } from '../../../constants';
-import { apiClient } from '../../../services/apiClient';
+import { recruiterService } from '../../../services/recruiterService';
 import { useToastStore } from '../../../store/useToastStore';
 import { ResumeViewerModal } from '../../../components/common/ResumeViewerModal';
 import { getStyles } from './ApplicantReviewScreen.styles';
@@ -24,7 +24,7 @@ export const ApplicantReviewScreen = () => {
   const handleStatusChange = async (newStatus: string) => {
     setLoading(true);
     try {
-      await apiClient.patch(`/recruiter/applications/${applicationId}`, { status: newStatus });
+      await recruiterService.updateApplicationStatus({ applicationId, status: newStatus });
       setStatus(newStatus);
       const displayStatus = newStatus === 'reviewing' ? 'Under Review' : newStatus === 'accepted' ? 'Approved & Hired' : newStatus;
       useToastStore.getState().show(`Applicant status updated to: ${displayStatus}`, 'success');

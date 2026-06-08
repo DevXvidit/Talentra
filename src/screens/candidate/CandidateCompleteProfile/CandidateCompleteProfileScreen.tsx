@@ -16,7 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { UploadCloud, FileText, Trash2, ChevronLeft, AlertCircle } from 'lucide-react-native';
 import { pick, types, isErrorWithCode, errorCodes } from '@react-native-documents/picker';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { apiClient } from '../../../services/apiClient';
+import { candidateService } from '../../../services/candidateService';
 import { completeProfileSchema, CompleteProfileFormData } from '../../../utils/schemas';
 import { getStyles } from './CandidateCompleteProfileScreen.styles';
 import { useTheme } from '../../../hooks/useTheme';
@@ -99,29 +99,21 @@ export const CandidateCompleteProfileScreen = () => {
     setIsSubmitting(true);
 
     try {
-      const formData = new FormData();
-      formData.append('name', data.name.trim());
-      formData.append('phone', `+91${data.phone.trim()}`);
-      formData.append('location', data.location.trim());
-      formData.append('title', data.title.trim());
-      formData.append('experience', data.experience.trim());
-
-      if (data.resume && !data.resume.uri.startsWith('http')) {
-        formData.append('resume', {
+      const response = await candidateService.completeProfile({
+        name: data.name.trim(),
+        phone: data.phone.trim(),
+        location: data.location.trim(),
+        title: data.title.trim(),
+        experience: data.experience.trim(),
+        resume: (data.resume && !data.resume.uri.startsWith('http')) ? {
           uri: data.resume.uri,
           name: data.resume.name,
           type: data.resume.type,
-        } as any);
-      }
-
-      const response = await apiClient.patch('/candidate/profile', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        } : undefined,
       });
 
-      if (response.data.success && response.data.user) {
-        updateUser(response.data.user);
+      if (response.success && response.user) {
+        updateUser(response.user);
         useToastStore.getState().show('Profile completed successfully! Welcome to Talentra.', 'success');
         
         navigation.goBack();

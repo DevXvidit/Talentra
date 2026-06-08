@@ -16,10 +16,10 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Camera, ChevronLeft, User as UserIcon, UploadCloud, AlertCircle } from 'lucide-react-native';
-import { pick, types, isErrorWithCode, errorCodes } from '@react-native-documents/picker';
+import { isErrorWithCode, errorCodes } from '@react-native-documents/picker';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { apiClient } from '../../../services/apiClient';
+import { recruiterService } from '../../../services/recruiterService';
 import { authService } from '../../../services/authService';
 import { getStyles } from './RecruiterCompleteProfileScreen.styles';
 import { useTheme } from '../../../hooks/useTheme';
@@ -142,52 +142,30 @@ export const RecruiterCompleteProfileScreen = () => {
 
     try {
       
-      const profileFormData = new FormData();
-      profileFormData.append('name', data.name.trim());
-      profileFormData.append('phone', `+91${data.phone.trim()}`);
-      profileFormData.append('location', data.location.trim());
-      profileFormData.append('recruiterTitle', data.recruiterTitle.trim());
-      profileFormData.append('about', data.about.trim());
-
-      if (avatar) {
-        profileFormData.append('avatar', {
-          uri: avatar.uri,
-          name: avatar.name,
-          type: avatar.type,
-        } as any);
-      }
-
-      await apiClient.patch('/recruiter/profile', profileFormData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      await recruiterService.updateProfile({
+        name: data.name.trim(),
+        phone: data.phone.trim(),
+        location: data.location.trim(),
+        recruiterTitle: data.recruiterTitle.trim(),
+        about: data.about.trim(),
+        avatar: avatar || undefined,
       });
 
-      const companyFormData = new FormData();
-      companyFormData.append('name', data.companyName.trim());
-      companyFormData.append('website', data.companyWebsite.trim());
-      companyFormData.append('headquarters', data.companyHeadquarters.trim());
-      companyFormData.append('industry', data.companyIndustry.trim());
-      companyFormData.append('size', data.companySize);
-      companyFormData.append('phone', `+91${data.phone.trim()}`);
-
-      if (companyLogo) {
-        companyFormData.append('logo', {
-          uri: companyLogo.uri,
-          name: companyLogo.name,
-          type: companyLogo.type,
-        } as any);
-      }
+      const companyParams = {
+        name: data.companyName.trim(),
+        website: data.companyWebsite.trim(),
+        headquarters: data.companyHeadquarters.trim(),
+        industry: data.companyIndustry.trim(),
+        size: data.companySize,
+        phone: data.phone.trim(),
+        logo: companyLogo || undefined,
+      };
 
       if (!user?.companyId) {
-        
-        await apiClient.post('/recruiter/companies', companyFormData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
+        await recruiterService.createCompany(companyParams);
       } else {
-        
         const companyId = typeof user.companyId === 'string' ? user.companyId : user.companyId._id;
-        await apiClient.patch(`/recruiter/companies/${companyId}`, companyFormData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
+        await recruiterService.updateCompany(companyId, companyParams);
       }
 
       const meResponse = await authService.getMe();

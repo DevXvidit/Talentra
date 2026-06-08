@@ -19,7 +19,9 @@ import { pick, types, isErrorWithCode, errorCodes } from '@react-native-document
 import { useToastStore } from '../../../store/useToastStore';
 import { ROUTES } from '../../../constants/screens';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { apiClient } from '../../../services/apiClient';
+import { jobService } from '../../../services/jobService';
+import { recruiterService } from '../../../services/recruiterService';
+import { authService } from '../../../services/authService';
 import { getStyles } from './JobDetailScreen.styles';
 import { useTheme } from '../../../hooks/useTheme';
 import JobDetailLoading from './components/JobDetailLoading';
@@ -59,11 +61,11 @@ export const JobDetailScreen = () => {
   const [appStatusLocal, setAppStatusLocal] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   
-  const [applicants, setApplicants] = useState<any[]>([]);
-  const [loadingApplicants, setLoadingApplicants] = useState(false);
-  const [applicantsPage, setApplicantsPage] = useState(1);
-  const [applicantsTotalPages, setApplicantsTotalPages] = useState(1);
-  const [loadingMoreApplicants, setLoadingMoreApplicants] = useState(false);
+  const [_applicants, setApplicants] = useState<any[]>([]);
+  const [_loadingApplicants, setLoadingApplicants] = useState(false);
+  const [_applicantsPage, setApplicantsPage] = useState(1);
+  const [_applicantsTotalPages, setApplicantsTotalPages] = useState(1);
+  const [_loadingMoreApplicants, setLoadingMoreApplicants] = useState(false);
 
   const [completeProfileVisible, setCompleteProfileVisible] = useState(false);
   const [applyResumeVisible, setApplyResumeVisible] = useState(false);
@@ -76,9 +78,9 @@ export const JobDetailScreen = () => {
     useCallback(() => {
       const syncUser = async () => {
         try {
-          const response = await apiClient.get('/auth/me');
-          if (response.data.success && response.data.data) {
-            updateUser(response.data.data);
+          const response = await authService.getMe();
+          if (response.success && response.user) {
+            updateUser(response.user);
           }
         } catch (err) {
           console.warn('Failed to sync user on JobDetail screen focus:', err);
@@ -92,8 +94,7 @@ export const JobDetailScreen = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await apiClient.get(`/jobs/${jobId}`);
-      const data = response.data.data;
+      const data = await jobService.fetchJobById(jobId);
       setJobData(data);
       if (data?.hasApplied) {
         setHasAppliedLocal(true);
@@ -114,17 +115,15 @@ export const JobDetailScreen = () => {
     else setLoadingMoreApplicants(true);
     
     try {
-      const response = await apiClient.get(`/recruiter/jobs/${jobId}/applicants`, { params: { page: pageNum, limit: 10 } });
-      const newApplicants = response.data.data || [];
-      const pagination = response.data.pagination || { totalPages: 1 };
+      const response = await recruiterService.fetchApplicants({ jobId, page: pageNum, limit: 10 });
       
       if (pageNum === 1) {
-        setApplicants(newApplicants || []);
+        setApplicants(response.applicants || []);
       } else {
-        setApplicants(prev => [...prev, ...(newApplicants || [])]);
+        setApplicants(prev => [...prev, ...(response.applicants || [])]);
       }
       setApplicantsPage(pageNum);
-      setApplicantsTotalPages(pagination.totalPages);
+      setApplicantsTotalPages(response.pagination.totalPages);
     } catch (err) {
       console.warn('Failed to load applicants:', err);
     } finally {
@@ -147,13 +146,13 @@ export const JobDetailScreen = () => {
     setJobData((prev: any) => ({ ...prev, isBookmarked: !prev.isBookmarked }));
 
     try {
-      const response = await apiClient.post(`/jobs/${jobId}/bookmark`);
-      setJobData((prev: any) => ({ ...prev, isBookmarked: response.data.isBookmarked }));
+      const result = await jobService.toggleBookmark(jobId);
+      setJobData((prev: any) => ({ ...prev, isBookmarked: result.isBookmarked }));
       useToastStore.getState().show(
-        response.data.isBookmarked ? 'Job added to bookmarks!' : 'Job removed from bookmarks.',
+        result.isBookmarked ? 'Job added to bookmarks!' : 'Job removed from bookmarks.',
         'success'
       );
-    } catch (err: any) {
+    } catch (_err: any) {
       
       setJobData((prev: any) => ({ ...prev, isBookmarked: previousBookmarked }));
       useToastStore.getState().show('Failed to update bookmark status.', 'error');
@@ -207,18 +206,11 @@ export const JobDetailScreen = () => {
 
     setIsUploading(true);
     try {
-      const formData = new FormData();
-      if (fileObj) {
-        formData.append('resume', fileObj as any);
-      } else {
-        formData.append('useSavedResume', 'true');
-      }
-      formData.append('coverLetter', coverLetter.trim());
-
-      await apiClient.post(`/jobs/${jobId}/apply`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      await jobService.applyToJob({
+        jobId,
+        coverLetter: coverLetter.trim(),
+        resumeFile: fileObj || undefined,
+        useSavedResume: selectedResumeType === 'saved',
       });
 
       setHasAppliedLocal(true);

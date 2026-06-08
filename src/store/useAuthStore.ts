@@ -164,7 +164,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         isAuthenticated: true,
         isLoading: false,
       });
-    } catch (error) {
+    } catch {
       clearAuthStorage();
       set({
         user: null,

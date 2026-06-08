@@ -12,11 +12,11 @@ import {
   Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Bookmark, MapPin, Briefcase, BookmarkX, Search, ChevronLeft, IndianRupee } from 'lucide-react-native';
+import { Bookmark, MapPin, Briefcase, BookmarkX, Search, IndianRupee } from 'lucide-react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ROUTES } from '../../../constants/screens';
-import { apiClient } from '../../../services/apiClient';
+import { jobService } from '../../../services/jobService';
 import { Job, RootStackParamList } from '../../../types';
 import { getStyles } from './SavedJobsScreen.styles';
 import { useTheme } from '../../../hooks/useTheme';
@@ -33,7 +33,7 @@ const timeAgo = (dateStr: string) => {
     if (diffDays <= 1) return 'Today';
     if (diffDays === 2) return 'Yesterday';
     return `${diffDays} days ago`;
-  } catch (e) {
+  } catch {
     return 'Recently';
   }
 };
@@ -101,17 +101,15 @@ export const SavedJobsScreen = () => {
       const params: any = { page: pageNum, limit: 10 };
       if (search.trim()) params.search = search.trim();
 
-      const response = await apiClient.get('/jobs/bookmarks', { params });
-      const jobs = response.data.data || [];
-      const pagination = response.data.pagination || { totalPages: 1 };
+      const response = await jobService.fetchBookmarks(params);
       
       if (pageNum === 1) {
-        setSavedJobs(jobs);
+        setSavedJobs(response.jobs);
       } else {
-        setSavedJobs(prev => [...prev, ...jobs]);
+        setSavedJobs(prev => [...prev, ...response.jobs]);
       }
       setPage(pageNum);
-      setTotalPages(pagination.totalPages);
+      setTotalPages(response.pagination.totalPages);
     } catch (err: any) {
       if (err.response?.status === 401) return;
       console.warn('Failed to fetch saved jobs:', err);
@@ -163,7 +161,7 @@ export const SavedJobsScreen = () => {
 
   const handleRemoveBookmark = async (jobId: string) => {
     try {
-      await apiClient.post(`/jobs/${jobId}/bookmark`);
+      await jobService.toggleBookmark(jobId);
       setSavedJobs(prev => prev.filter(job => job.id !== jobId));
     } catch (err) {
       console.warn('Failed to remove bookmark:', err);

@@ -1,5 +1,3 @@
-import { Platform } from 'react-native';
-
 export * from './screens';
 export * from './jobs';
 export * from './theme';

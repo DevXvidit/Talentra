@@ -185,6 +185,7 @@ export const LoginScreen = () => {
                     value={value}
                     autoCapitalize="none"
                     keyboardType="email-address"
+                    editable={!loading}
                   />
                 </View>
               )}
@@ -217,6 +218,7 @@ export const LoginScreen = () => {
                     onChangeText={onChange}
                     value={value}
                     autoCapitalize="none"
+                    editable={!loading}
                   />
                   <TouchableOpacity
                     onPress={() => setSecurePassword(!securePassword)}
@@ -262,8 +264,9 @@ export const LoginScreen = () => {
 
           <View style={styles.socialRow}>
             <TouchableOpacity
-              style={styles.socialButton}
+              style={[styles.socialButton, loading && { opacity: 0.5 }]}
               activeOpacity={0.8}
+              disabled={loading}
               onPress={() => handleSocialSignIn(AUTH_PROVIDERS.GOOGLE)}
             >
               <GoogleLogo size={16} />
@@ -285,6 +288,7 @@ export const LoginScreen = () => {
             <Text style={styles.toggleText}>Don't have an account?</Text>
             <TouchableOpacity
               activeOpacity={0.7}
+              disabled={loading}
               onPress={() => navigation.navigate(ROUTES.REGISTER, { role: USER_ROLES.CANDIDATE })}
             >
               <Text style={styles.toggleLink}> Sign up</Text>

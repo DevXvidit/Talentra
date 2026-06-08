@@ -6,7 +6,6 @@ import {
   ScrollView,
   StatusBar,
   Image,
-  Alert,
   Switch,
   Modal,
   TouchableWithoutFeedback,
@@ -22,12 +21,10 @@ import {
   Briefcase,
   FileText,
   RotateCw,
-  Bell,
   Shield,
   Moon,
   HelpCircle,
   LogOut,
-  Settings,
   Camera,
   ChevronRight,
   X,
@@ -38,15 +35,14 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { useToastStore } from '../../../store/useToastStore';
 import { useTheme } from '../../../hooks/useTheme';
 import { useAuthStore } from '../../../store/useAuthStore';
-import { apiClient } from '../../../services/apiClient';
 import { authService } from '../../../services/authService';
+import { candidateService } from '../../../services/candidateService';
 import { ROUTES } from '../../../constants/screens';
 import { getStyles } from './CandidateProfileScreen.styles';
 import { ResumeViewerModal } from '../../../components/common/ResumeViewerModal';
 import { API_BASE_URL } from '../../../constants';
 
 import CandidateProfileLoading from './components/CandidateProfileLoading';
-import CandidateProfileError from './components/CandidateProfileError';
 
 export const CandidateProfileScreen = () => {
   const navigation = useNavigation<any>();
@@ -54,11 +50,10 @@ export const CandidateProfileScreen = () => {
 
   const [stats, setStats] = useState<{ applied: number; hired: number; saved: number } | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [_error, setError] = useState<string | null>(null);
 
   const [privacyVisible, setPrivacyVisible] = useState(false);
   const [supportVisible, setSupportVisible] = useState(false);
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
   const [resumeViewerVisible, setResumeViewerVisible] = useState(false);
   const [resumeOptionsVisible, setResumeOptionsVisible] = useState(false);
 
@@ -102,21 +97,14 @@ export const CandidateProfileScreen = () => {
       setLoading(true);
       const asset = result.assets[0];
 
-      const formData = new FormData();
-      formData.append('avatar', {
+      const response = await candidateService.updateAvatar({
         uri: asset.uri!,
         name: asset.fileName || 'avatar.jpg',
         type: asset.type || 'image/jpeg',
-      } as any);
-
-      const response = await apiClient.patch('/candidate/profile', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
       });
 
-      if (response.data.success && response.data.user) {
-        updateUser(response.data.user);
+      if (response.success && response.user) {
+        updateUser(response.user);
         useToastStore.getState().show('Profile picture updated successfully!', 'success');
         fetchProfileStats();
       } else {
@@ -144,25 +132,21 @@ export const CandidateProfileScreen = () => {
       if (!result) return;
 
       setLoading(true);
-      const formData = new FormData();
-      formData.append('name', user?.name || '');
-      formData.append('phone', user?.phone || '');
-      formData.append('location', user?.location || '');
-      formData.append('experience', String(user?.experience ?? 0));
-      formData.append('resume', {
-        uri: result.uri,
-        name: result.name || 'resume.pdf',
-        type: result.type || 'application/pdf',
-      } as any);
 
-      const response = await apiClient.patch('/candidate/profile', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+      const response = await candidateService.updateResume({
+        name: user?.name || '',
+        phone: user?.phone || '',
+        location: user?.location || '',
+        experience: String(user?.experience ?? 0),
+        resume: {
+          uri: result.uri,
+          name: result.name || 'resume.pdf',
+          type: result.type || 'application/pdf',
         },
       });
 
-      if (response.data.success && response.data.user) {
-        updateUser(response.data.user);
+      if (response.success && response.user) {
+        updateUser(response.user);
         useToastStore.getState().show('Resume updated successfully!', 'success');
         fetchProfileStats();
       } else {
@@ -203,10 +187,6 @@ export const CandidateProfileScreen = () => {
   const handleLogout = () => {
     logout();
     useToastStore.getState().show('Logged out successfully.', 'info');
-  };
-
-  const handleBack = () => {
-    navigation.goBack();
   };
 
   if (loading) {
@@ -454,18 +434,6 @@ export const CandidateProfileScreen = () => {
                     Talentra takes your privacy very seriously. We use industry-standard encryption protocols to protect your personal details, credentials, and uploaded documents like your resume.
                   </Text>
 
-                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: colors.muted, padding: 16, borderRadius: 12, marginTop: 12 }}>
-                    <View style={{ flex: 1, paddingRight: 12 }}>
-                      <Text style={{ fontSize: 14, fontWeight: '600', color: colors.foreground, marginBottom: 4, fontFamily: 'Inter' }}>Two-Factor Authentication</Text>
-                      <Text style={{ fontSize: 12, color: colors.mutedForeground, fontFamily: 'Inter' }}>Require a verification code when signing in.</Text>
-                    </View>
-                    <Switch
-                      value={twoFactorEnabled}
-                      onValueChange={setTwoFactorEnabled}
-                      trackColor={{ false: colors.border, true: colors.secondary }}
-                      thumbColor={Platform.OS === 'android' ? colors.primary : undefined}
-                    />
-                  </View>
 
                   <Text style={[styles.modalSubTitle, styles.modalSubTitleDark]}>Resume Visibility</Text>
                   <Text style={[styles.modalBodyText, styles.modalBodyTextDark]}>

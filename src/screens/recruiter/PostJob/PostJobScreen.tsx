@@ -13,8 +13,9 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { ChevronLeft, Briefcase, MapPin, IndianRupee, Tag, FileText, AlertCircle, ListChecks } from 'lucide-react-native';
+import { ROUTES } from '../../../constants/screens';
 import { JOB_TYPES, JOB_CATEGORIES } from '../../../constants/jobs';
-import { apiClient } from '../../../services/apiClient';
+import { jobService } from '../../../services/jobService';
 import { useAuthStore } from '../../../store/useAuthStore';
 import { useToastStore } from '../../../store/useToastStore';
 import { CategoryDropdown } from '../../../components/common/CategoryDropdown';
@@ -70,8 +71,7 @@ export const PostJobScreen = () => {
       const fetchJobDetails = async () => {
         setLoading(true);
         try {
-          const response = await apiClient.get(`/jobs/${jobId}`);
-          const job = response.data.data;
+          const job = await jobService.fetchJobById(jobId);
           if (job) {
             setTitle(job.title || '');
             setDescription(job.description || '');
@@ -84,7 +84,7 @@ export const PostJobScreen = () => {
             setTotalPositions(String(job.totalPositions || 1));
             setFilledPositions(job.filledPositions || 0);
           }
-        } catch (err: any) {
+        } catch (_err: any) {
           useToastStore.getState().show('Failed to fetch job details.', 'error');
         } finally {
           setLoading(false);
@@ -225,13 +225,13 @@ export const PostJobScreen = () => {
       };
 
       if (jobId) {
-        await apiClient.patch(`/jobs/${jobId}`, payload);
+        await jobService.updateJob(jobId, payload);
         useToastStore.getState().show('Job listing updated successfully!', 'success');
         
         navigation.setParams({ jobId: undefined });
         navigation.goBack();
       } else {
-        await apiClient.post('/jobs', payload);
+        await jobService.createJob(payload);
         useToastStore.getState().show('Your job listing has been posted successfully!', 'success');
         
         setStep(1);
@@ -248,6 +248,7 @@ export const PostJobScreen = () => {
         setFilledPositions(0);
         setErrors({});
         setHasSubmittedFailed(false);
+        navigation.navigate(ROUTES.RECRUITER_JOB_FEED);
       }
     } catch (err: any) {
       const msg = err?.response?.data?.message || 'Failed to submit job listing. Please try again.';
@@ -298,7 +299,7 @@ export const PostJobScreen = () => {
       </View>
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.flex}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       >
