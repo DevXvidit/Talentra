@@ -66,8 +66,8 @@ export const JobFeedScreen = () => {
   const showCompletionBanner = !user?.isProfileComplete && completionPercentage < 100;
 
   const [jobs, setJobs] = useState<Job[]>([]);
-  const [loading, setLoading] = useState(true);   
-  const [searching, setSearching] = useState(false); 
+  const [loading, setLoading] = useState(true);
+  const [searching, setSearching] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -87,7 +87,7 @@ export const JobFeedScreen = () => {
 
   useEffect(() => {
     let animationLoop: Animated.CompositeAnimation | null = null;
-    
+
     if (searching) {
       animationLoop = Animated.loop(
         Animated.sequence([
@@ -200,7 +200,7 @@ export const JobFeedScreen = () => {
     useCallback(() => {
       if (isFirstLoad.current) {
         isFirstLoad.current = false;
-        fetchJobs(1, false, true, false); 
+        fetchJobs(1, false, true, false);
       } else {
         const { search: s, selectedCategory: cat, selectedType: type } = filtersRef.current;
         const hasActiveFilters = !!(s.trim() || cat || type !== 'All');
@@ -214,18 +214,18 @@ export const JobFeedScreen = () => {
     if (debounceTimer.current) clearTimeout(debounceTimer.current);
     debounceTimer.current = setTimeout(() => {
       filtersRef.current = { ...filtersRef.current, search };
-      fetchJobs(1, false, false, true); 
+      fetchJobs(1, false, false, true);
     }, 600);
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
     };
-  
+
   }, [search]);
 
   useEffect(() => {
     filtersRef.current = { ...filtersRef.current, selectedCategory, selectedType };
     fetchJobs(1, false, false, true);
-  
+
   }, [selectedCategory, selectedType]);
 
   const handleRefresh = () => fetchJobs(1, true);
@@ -449,13 +449,13 @@ export const JobFeedScreen = () => {
             <Search size={18} color={colors.mutedForeground} />
             <TextInput
               style={styles.searchInput}
-              placeholder="Search jobs, titles, skills..."
+              placeholder="Search Job Roles"
               placeholderTextColor={colors.mutedForeground}
               value={search}
               onChangeText={setSearch}
               returnKeyType="search"
               onSubmitEditing={() => {
-                
+
                 filtersRef.current = { ...filtersRef.current, search };
                 fetchJobs(1);
               }}
@@ -485,8 +485,8 @@ export const JobFeedScreen = () => {
       <FlatList
         data={searching ? ([1, 2, 3] as any[]) : (displayedJobs as any[])}
         keyExtractor={(item, index) => (searching ? `skeleton_${index}` : (item as Job).id || String(index))}
-        renderItem={searching 
-          ? () => <JobCardSkeleton animatedValue={skeletonAnim} colors={colors} style={styles.jobCard} /> 
+        renderItem={searching
+          ? () => <JobCardSkeleton animatedValue={skeletonAnim} colors={colors} style={styles.jobCard} />
           : (renderJobCard as any)
         }
         ListEmptyComponent={searching ? null : renderEmpty}

@@ -13,6 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { ChevronLeft, Briefcase, MapPin, IndianRupee, Tag, FileText, AlertCircle, ListChecks } from 'lucide-react-native';
+import { ROUTES } from '../../../constants/screens';
 import { JOB_TYPES, JOB_CATEGORIES } from '../../../constants/jobs';
 import { jobService } from '../../../services/jobService';
 import { useAuthStore } from '../../../store/useAuthStore';
@@ -247,6 +248,7 @@ export const PostJobScreen = () => {
         setFilledPositions(0);
         setErrors({});
         setHasSubmittedFailed(false);
+        navigation.navigate(ROUTES.RECRUITER_JOB_FEED);
       }
     } catch (err: any) {
       const msg = err?.response?.data?.message || 'Failed to submit job listing. Please try again.';
@@ -297,7 +299,7 @@ export const PostJobScreen = () => {
       </View>
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.flex}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       >

@@ -54,7 +54,6 @@ export const CandidateProfileScreen = () => {
 
   const [privacyVisible, setPrivacyVisible] = useState(false);
   const [supportVisible, setSupportVisible] = useState(false);
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
   const [resumeViewerVisible, setResumeViewerVisible] = useState(false);
   const [resumeOptionsVisible, setResumeOptionsVisible] = useState(false);
 
@@ -435,18 +434,6 @@ export const CandidateProfileScreen = () => {
                     Talentra takes your privacy very seriously. We use industry-standard encryption protocols to protect your personal details, credentials, and uploaded documents like your resume.
                   </Text>
 
-                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: colors.muted, padding: 16, borderRadius: 12, marginTop: 12 }}>
-                    <View style={{ flex: 1, paddingRight: 12 }}>
-                      <Text style={{ fontSize: 14, fontWeight: '600', color: colors.foreground, marginBottom: 4, fontFamily: 'Inter' }}>Two-Factor Authentication</Text>
-                      <Text style={{ fontSize: 12, color: colors.mutedForeground, fontFamily: 'Inter' }}>Require a verification code when signing in.</Text>
-                    </View>
-                    <Switch
-                      value={twoFactorEnabled}
-                      onValueChange={setTwoFactorEnabled}
-                      trackColor={{ false: colors.border, true: colors.secondary }}
-                      thumbColor={Platform.OS === 'android' ? colors.primary : undefined}
-                    />
-                  </View>
 
                   <Text style={[styles.modalSubTitle, styles.modalSubTitleDark]}>Resume Visibility</Text>
                   <Text style={[styles.modalBodyText, styles.modalBodyTextDark]}>

@@ -3,6 +3,7 @@ import { STORAGE_KEYS, USER_ROLES } from '../constants';
 import { User, UserRole } from '../types';
 
 let localInstance: any;
+
 try {
   localInstance = createMMKV({ id: 'talentra-storage' });
 } catch (e) {
